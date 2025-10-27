@@ -3,6 +3,8 @@ import { sendJSON } from "../lib/response.js";
 import { loadUserCacheWithSeen, readAdvancements } from "../services/world.js";
 import { getAdvCatalog } from "../services/advCatalog.js";
 import { extractPlayerKey, latestCriteriaTime } from "../lib/util.js";
+import { loadLangFile, loadLangFromJar, enrichAdvCatalog } from "../services/langResolver.js";
+import path from "node:path";
 
 function parentGetter(catalog: { id: string; parent?: string | null }[]) {
   const byId = new Map(catalog.map(x => [x.id, x.parent ?? null]));
@@ -38,12 +40,37 @@ export async function playerAdvancementsHandler(req: http.IncomingMessage, res: 
 
     let playerMap: Record<string, any> = advFromDisk;
 
-    const prelim = catalog.map(c => {
+    const MC_VERSION = "1.21.10";
+    const LOCAL_EN_US = path.resolve(process.env.LOCAL_ASSETS_DIR || "");
+    const CLIENT_JAR = process.env.CLIENT_JAR || "";
+
+    if (CLIENT_JAR) {
+        await loadLangFromJar(CLIENT_JAR, MC_VERSION, "minecraft");
+    } else {
+        console.log("[langResolver] loading en_us from file:", LOCAL_EN_US);
+        await loadLangFile(MC_VERSION, "minecraft", LOCAL_EN_US);
+    }
+    const localizedCatalog = enrichAdvCatalog(catalog, MC_VERSION);
+
+    const prelim = localizedCatalog.map(c => {
         const v: any = playerMap[c.id];
         const when = latestCriteriaTime(v);
         const done = Boolean(when);
-        return { id: c.id, title: c.title || c.id, parent: c.parent ?? null, done, when: when || null };
-    });
+        return {
+            id: c.id,
+            title: c.title || c.id,
+            parent: c.parent ?? null,
+            done,
+            when: when || null,
+            category: c.category,
+            description: c.description,
+            descriptionKey: (c as any).descriptionKey,
+            iconItem: c.iconItem,
+            background: c.background,
+            frame: c.frame,
+            hidden: c.hidden
+        };
+});
 
     const doneSet = new Set(prelim.filter(r => r.done).map(r => r.id));
     const parentOf = parentGetter(catalog);

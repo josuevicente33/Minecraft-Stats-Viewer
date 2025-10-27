@@ -4,6 +4,7 @@ import { sendJSON } from "../lib/response.js";
 import { readAdvancements, readPlayerStatsRaw, loadUserCacheWithSeen } from "../services/world.js";
 import { extractProfile } from "../services/profile.js";
 import { latestCriteriaTime } from "../lib/util.js";
+import { getAdvCatalog } from "../services/advCatalog.js";
 
 export async function playerHandler(req: http.IncomingMessage, res: http.ServerResponse) {
     const rawURL = req.url || "/";
@@ -25,13 +26,21 @@ export async function playerHandler(req: http.IncomingMessage, res: http.ServerR
     const name = maps.byUUID.get(uuid) ?? key;
     const lastSeen = maps.lastSeen ? maps.lastSeen.get(uuid) || null : null;
 
-    const allAdv: { id: string; when: string }[] = Object.entries(advMap || {}).flatMap(([id, v]: any) => {
-      const when = latestCriteriaTime(v);
-      return when ? [{ id, when }] : [];
-    });
+    const catalog = await getAdvCatalog();
+    const visibleAdvSet = new Set(catalog.filter(r => !r.hidden).map(r => r.id));
 
-    allAdv.sort((a, b) => String(b.when).localeCompare(String(a.when)));
-    const recent = allAdv.slice(0, 5);
+    const completed: { id: string; when: string }[] = [];
+
+    if (advMap && typeof advMap === "object") {
+        for (const [id, v] of Object.entries(advMap)) {
+            if (!visibleAdvSet.has(id)) continue;
+            const when = latestCriteriaTime(v);
+            if (when) completed.push({ id, when });
+        }
+    }
+
+    completed.sort((a, b) => String(b.when).localeCompare(String(a.when)));
+    const recent = completed.slice(0, 5);
 
     const payload = { 
         name, 
@@ -40,7 +49,7 @@ export async function playerHandler(req: http.IncomingMessage, res: http.ServerR
         stats: profile.totals, 
         top: profile.top, 
         advancements: {
-            total: allAdv.length,
+            total: completed.length,
             recent,
         }
     };
