@@ -35,7 +35,18 @@ export type PlayerWithAll = PlayerSummary & {
   advancements: PlayerSummary["advancements"] & { all: AdvItem[] };
 };
 
-export type AdvMerged = { id: string; title: string; parent: string | null; done: boolean; when: string | null };
+export type AdvMerged = { 
+  id: string; 
+  title: string; 
+  parent: string | null; 
+  done: boolean; 
+  when: string | null;
+
+  titleKey?: string;
+  description?: string;
+  descriptionKey?: string;
+  category: string;
+ };
 
 // Leaderboard row
 export type LbRow = { name: string; uuid: string; value: number; extra?: Record<string, number> };

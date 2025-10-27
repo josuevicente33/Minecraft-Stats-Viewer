@@ -273,29 +273,89 @@ export default function Player() {
                                     return name.includes(term)
                                 })
                                 .map((a) => (
-                                    <li key={`${a.id}-${a.when ?? "none"}`} className="flex items-center justify-between">
-                                        <span className={`truncate ${a.done ? "" : "text-gray-500 dark:text-gray-400"}`}>
-                                            {prettyId(a.title)}
-                                        </span>
-                                        
-                                        <span className="text-xs text-gray-500">
-                                            {"state" in a && (
-                                                <span
-                                                    className={[
-                                                    "rounded-md px-1.5 py-0.5 text-xs",
+                                    <li
+                                        key={`${a.id}-${a.when ?? "none"}`}
+                                        // make li focusable so keyboard users can reveal the tooltip via tab + focus
+                                        tabIndex={0}
+                                        className="group relative flex items-center justify-between gap-4 py-2"
+                                        aria-describedby={`adv-desc-${a.id}`}
+                                    >
+                                        {/* LEFT: title */}
+                                        <div className="flex-1 min-w-0">
+                                            <span className={`truncate ${a.done ? "" : "text-gray-500 dark:text-gray-400"}`}>
+                                                {prettyId(a.title)}
+                                            </span>
+
+                                            {/* tooltip: appears on hover / focus of the li (group) */}
+                                            <div
+                                                id={`adv-desc-${a.id}`}
+                                                role="status"
+                                                className="pointer-events-none invisible opacity-0 transition-opacity duration-150 absolute left-0 top-full mt-2 z-20 w-md max-w-full rounded-lg border bg-white p-3 text-sm text-gray-700 shadow-lg dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100"
+                                            >
+                                                <div className="flex items-start gap-3">
+                                                    {/* optional icon (if you later extract icons) */}
+                                                    {/* {a.iconItem ? ( */}
+                                                        {/* <div className="flex-shrink-0"> */}
+                                                        {/* placeholder square for icon; replace with <img> when you extract assets */}
+                                                        {/* <div className="h-8 w-8 rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs"> */}
+                                                            {/* {a.iconItem.split(":").pop()} */}
+                                                        {/* </div> */}
+                                                        {/* </div> */}
+                                                    {/* ) : null} */}
+
+                                                <div className="min-w-0">
+                                                    <div className="mb-1 font-medium text-gray-900 dark:text-gray-100">
+                                                    {prettyId(a.title)}
+                                                    </div>
+                                                    <div className="text-xs text-gray-600 dark:text-gray-300">
+                                                    {a.description ?? ""}
+                                                    </div>
+
+                                                    {/* meta row inside tooltip (category + when) */}
+                                                    <div className="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                                                    <span className="rounded-full bg-gray-100 px-2 py-0.5 dark:bg-gray-800">
+                                                        {a.category ?? "misc"}
+                                                    </span>
+                                                    {a.when ? <span>Last trigger: {a.when ? new Date(a.when).toLocaleString() : "locked"}</span> : null}
+                                                    </div>
+                                                </div>
+                                                </div>
+
+                                                {/* little caret/arrow */}
+                                                <div className="absolute left-4 top-0 -translate-y-1/2 transform">
+                                                    <svg className="h-3 w-3 text-white dark:text-gray-900" viewBox="0 0 8 8" fill="none" aria-hidden>
+                                                        <path d="M0 6 L4 0 L8 6 Z" fill="currentColor" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* MIDDLE: category label */}
+                                        <div className="hidden md:flex items-center justify-center w-36 shrink-0">
+                                            <span className="text-sm font-medium text-gray-600 dark:text-gray-300 capitalize">
+                                                {a.category ?? "misc"}
+                                            </span>
+                                        </div>
+
+                                        {/* RIGHT: state pill */}
+                                        <div className="shrink-0">
+                                        {"state" in a && (
+                                            <span
+                                                className={[
+                                                    "rounded-md px-2 py-0.5 text-xs",
                                                     a.state === "done"
-                                                        ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
-                                                        : a.state === "available"
-                                                        ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
-                                                        : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
-                                                    ].join(" ")}
-                                                >
-                                                    {String(a.state).toUpperCase()}
-                                                </span> 
-                                            )}                                   
-                                        </span>
-                                    </li>
-                                ))}
+                                                    ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+                                                    : a.state === "available"
+                                                    ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
+                                                    : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
+                                                ].join(" ")}
+                                            >
+                                                {String(a.state).toUpperCase()}
+                                            </span>
+                                        )}
+                                    </div>
+                                </li>
+                            ))}
                         </ul>
                     </div>
 
