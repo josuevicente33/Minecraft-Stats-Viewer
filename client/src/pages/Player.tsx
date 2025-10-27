@@ -6,7 +6,7 @@ import { getPlayer, getAdvancementsMerged } from "../api/api";
 import type { PlayerSummary, AdvMerged } from "../types/types";
 
 // UTILS
-import { prettyId, ticksToHours, cmToKm, kdr, avatarUrl, fmtRel } from "../util/util";
+import { prettyId, ticksToHours, cmToKm, kdr, avatarUrl } from "../util/util";
 
 // UI
 import { StatCard } from "../componets/ui/StatCard";
