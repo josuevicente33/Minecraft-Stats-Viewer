@@ -1,0 +1,18 @@
+[
+  { "id": "minecraft:story/root", "title": "Minecraft", "parent": null },
+  { "id": "minecraft:story/mine_stone", "title": "Stone Age", "parent": "minecraft:story/root" },
+  { "id": "minecraft:story/upgrade_tools", "title": "Getting an Upgrade", "parent": "minecraft:story/mine_stone" },
+  { "id": "minecraft:story/smelt_iron", "title": "Acquire Hardware", "parent": "minecraft:story/upgrade_tools" },
+  { "id": "minecraft:story/obtain_armor", "title": "Suit Up", "parent": "minecraft:story/upgrade_tools" },
+  { "id": "minecraft:story/deflect_arrow", "title": "Not Today, Thank You", "parent": "minecraft:story/obtain_armor" },
+
+  { "id": "minecraft:adventure/root", "title": "Adventure", "parent": null },
+  { "id": "minecraft:adventure/kill_a_mob", "title": "Monster Hunter", "parent": "minecraft:adventure/root" },
+  { "id": "minecraft:adventure/kill_all_mobs", "title": "Monsters Hunted", "parent": "minecraft:adventure/kill_a_mob" },
+
+  { "id": "minecraft:nether/root", "title": "Nether", "parent": null },
+  { "id": "minecraft:nether/return_to_sender", "title": "Return to Sender", "parent": "minecraft:nether/root" },
+
+  { "id": "minecraft:end/root", "title": "The End", "parent": null },
+  { "id": "minecraft:end/kill_dragon", "title": "Free the End", "parent": "minecraft:end/root" }
+]

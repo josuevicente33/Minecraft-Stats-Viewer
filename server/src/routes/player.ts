@@ -47,7 +47,11 @@ export async function playerHandler(req: http.IncomingMessage, res: http.ServerR
       { id: "minecraft:end/dragon_egg1", when: "2025-10-26T20:00:00Z" },
       { id: "minecraft:end/dragon_egg", when: "2025-10-26T20:00:00Z" },
       { id: "minecraft:end/the_end", when: "2025-10-26T20:00:00Z" },
-      { id: "minecraft:adventure/adventuring_time", when: "2025-10-26T20:00:00Z" }
+      { id: "minecraft:adventure/adventuring_time", when: "2025-10-26T20:00:00Z" },
+      { id: "minecraft:story/enter_the_nether", when: "2025-10-26T20:00:00Z" },
+      { id: "minecraft:story/upgrade_tools", when: "2025-10-26T20:00:00Z" },
+      { id: "minecraft:story/smelt_iron", when: "2025-10-26T20:00:00Z" },
+      { id: "minecraft:story/prepare_to_ride", when: "2025-10-26T20:00:00Z" },
     ];
 
     const payload = {
