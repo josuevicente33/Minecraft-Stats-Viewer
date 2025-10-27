@@ -15,6 +15,6 @@ COPY --from=builder /app/dist ./dist
 # COPY --from=builder /app/src/data ./src/data
 
 RUN npm ci --production
-EXPOSE 8080
+EXPOSE 4002
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:8080/health || exit 1
 CMD ["node", "dist/index.js"]
