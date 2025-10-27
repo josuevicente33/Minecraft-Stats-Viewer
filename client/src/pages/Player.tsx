@@ -125,9 +125,9 @@ export default function Player() {
                     <h1 className="mt-1 text-2xl font-semibold tracking-tight">{data.name}</h1>
                     <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
                         <span>
-                            UUID: <code className="rounded bg-gray-100 px-1.5 py-0.5 dark:bg-gray-800">{data.uuid}</code>
+                            UUID: <code className="rounded bg-gray-100 px-1.5 py-0.5 dark:bg-gray-800">{id}</code>
                         </span>
-                        <span>Last seen: {fmtRel(data.lastSeen)}</span>
+                        {/* <span>Last seen: {fmtRel(data.lastSeen)}</span> */}
                     </div>
                 </div>
 
