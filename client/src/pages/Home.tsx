@@ -1,4 +1,4 @@
-import StatusBar from "../componets/ui/StatusBar";
+import StatusBar from "../components/ui/StatusBar";
 
 export default function Home() {
     return (

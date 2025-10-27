@@ -9,9 +9,9 @@ import type { PlayerSummary, AdvMerged } from "../types/types";
 import { prettyId, ticksToHours, cmToKm, kdr, avatarUrl } from "../util/util";
 
 // UI
-import { StatCard } from "../componets/ui/StatCard";
-import { TopList } from "../componets/ui/TopList";
-import InfoPopover from "../componets/ui/InfoPopover";
+import { StatCard } from "../components/ui/StatCard";
+import { TopList } from "../components/ui/TopList";
+import InfoPopover from "../components/ui/InfoPopover";
 
 export default function Player() {
     const { id = "" } = useParams();
