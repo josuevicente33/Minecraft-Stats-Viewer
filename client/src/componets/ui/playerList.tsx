@@ -54,11 +54,12 @@ export default function PlayerList() {
                             <th className="px-3 py-2 font-medium text-gray-600 dark:text-gray-300">UUID</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         {players.map((p, i) => (
                             <tr key={p.uuid} className={i % 2 ? "bg-white dark:bg-gray-950" : "bg-gray-50/50 dark:bg-gray-900/30"}>
                                 <td className="px-3 py-2">
-                                    <Link to={`/player/${encodeURIComponent(p.uuid)}`} className="text-blue-600 hover:underline dark:text-blue-400">
+                                    <Link to={`/players/${encodeURIComponent(p.uuid)}`} className="text-blue-600 hover:underline dark:text-blue-400">
                                         {p.name}
                                     </Link>
                                 </td>

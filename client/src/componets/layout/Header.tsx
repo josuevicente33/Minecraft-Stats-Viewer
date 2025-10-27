@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import Logo from "../../assets/MCLogo.png";
 
 const linkBase =
   "inline-flex items-center rounded-lg border border-transparent px-3 py-1.5 text-sm font-medium transition-colors";
@@ -12,7 +13,7 @@ export default function Header() {
     <header className="sticky top-0 z-20 border-b bg-white/90 backdrop-blur supports-backdrop-filter:bg-white/60 dark:border-gray-800 dark:bg-gray-950/80">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <NavLink to="/" className="flex items-center gap-2">
-          <span className="inline-block h-6 w-6 rounded bg-green-500/20 ring-1 ring-green-500/40" />
+          <img src={Logo} alt="Logo" className="h-6 w-6 rounded" />
           <h1 className="text-lg font-semibold tracking-tight">Minecraft Stats Viewer</h1>
         </NavLink>
 

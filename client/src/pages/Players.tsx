@@ -1,4 +1,4 @@
-import PlayerList from "../componets/ui/playerList";
+import PlayerList from "../componets/ui/PlayerList";
 
 export default function Players() {
     return (
