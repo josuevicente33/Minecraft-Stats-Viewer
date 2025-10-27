@@ -13,22 +13,45 @@ export async function getPlayers() {
 }
 
 
+// export async function getPlayer(nameOrUuid: string) {
+//     const r = await fetch(`${BASE}/player/${encodeURIComponent(nameOrUuid)}`);
+//     if (!r.ok) throw new Error(`status ${r.status}`);
+//     return (await r.json()) as {
+//         name: string;
+//         uuid: string;
+//         stats: {
+//         playTime: number;
+//         deaths: number;
+//         mobKills: number;
+//         playerKills: number;
+//         jumps: number;
+//         walkCm: number;
+//         flyCm: number;
+//         };
+//         advancements?: Record<string, unknown> | null;
+//     };
+// }
+
 export async function getPlayer(nameOrUuid: string) {
     const r = await fetch(`${BASE}/player/${encodeURIComponent(nameOrUuid)}`);
     if (!r.ok) throw new Error(`status ${r.status}`);
     return (await r.json()) as {
-        name: string;
-        uuid: string;
+        name: string; uuid: string;
         stats: {
-        playTime: number;
-        deaths: number;
-        mobKills: number;
-        playerKills: number;
-        jumps: number;
-        walkCm: number;
-        flyCm: number;
+            playTime: number; deaths: number; mobKills: number; playerKills: number;
+            jumps: number; walkCm: number; flyCm: number; boatCm: number; minecartCm: number;
+            horseCm: number; swimCm: number; damageDealt: number; damageTaken: number;
+            timeSinceDeath: number; timeSinceRest: number;
         };
-        advancements?: Record<string, unknown> | null;
+        top: {
+            mined: { id: string; value: number }[];
+            used: { id: string; value: number }[];
+            broken: { id: string; value: number }[];
+            mobsKilled: { id: string; value: number }[];
+            killedBy: { id: string; value: number }[];
+        };
+        advancementsCount: number;
+        recentAdvancements: { id: string; when: string }[];
     };
 }
 
