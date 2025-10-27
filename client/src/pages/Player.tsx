@@ -103,6 +103,7 @@ export default function Player() {
     }
 
     const s = data.stats;
+    console.log('fullAdv', fullAdv);
 
     return (
         <div className="mx-auto max-w-5xl p-4 sm:p-6">
@@ -227,14 +228,14 @@ export default function Player() {
                         <InfoPopover label="What do these filters mean?">
                             <div className="space-y-2">
                                 <div>
-                                    <span className="font-medium">Completed</span> — you’ve finished this advancement.
+                                    <span className="font-medium">Completed</span> — you've finished this advancement.
                                 </div>
                                 <div>
                                     <span className="font-medium">Available</span> — not completed yet, but all required parents are done (or
-                                    it’s a root), so you can work on it now.
+                                    it's a root), so you can work on it now.
                                 </div>
                                 <div>
-                                    <span className="font-medium">Locked</span> — not completed and at least one parent in the chain isn’t
+                                    <span className="font-medium">Locked</span> — not completed and at least one parent in the chain isn't
                                     done yet.
                                 </div>
                                 <hr className="my-2 border-gray-200 dark:border-gray-800" />
@@ -305,18 +306,18 @@ export default function Player() {
 
                                                 <div className="min-w-0">
                                                     <div className="mb-1 font-medium text-gray-900 dark:text-gray-100">
-                                                    {prettyId(a.title)}
+                                                        {prettyId(a.title)}
                                                     </div>
                                                     <div className="text-xs text-gray-600 dark:text-gray-300">
-                                                    {a.description ?? ""}
+                                                        {a.description ?? ""}
                                                     </div>
 
                                                     {/* meta row inside tooltip (category + when) */}
                                                     <div className="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                                                    <span className="rounded-full bg-gray-100 px-2 py-0.5 dark:bg-gray-800">
-                                                        {a.category ?? "misc"}
-                                                    </span>
-                                                    {a.when ? <span>Last trigger: {a.when ? new Date(a.when).toLocaleString() : "locked"}</span> : null}
+                                                        <span className="rounded-full bg-gray-100 px-2 py-0.5 dark:bg-gray-800">
+                                                            {a.category ?? "misc"}
+                                                        </span>
+                                                        {a.when ? <span>Last trigger: {a.when ? new Date(a.when).toLocaleString() : "locked"}</span> : null}
                                                     </div>
                                                 </div>
                                                 </div>
