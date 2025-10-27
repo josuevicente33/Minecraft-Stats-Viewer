@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import http from "node:http";
 import { PORT, DATA_DIR, WORLD_DIR, MOCK } from "./config.js";
 import { Router } from "./lib/router.js";
@@ -13,7 +15,7 @@ const router = new Router()
   .on("GET", /^\/status$/, statusHandler)
   .on("GET", /^\/players$/, playersHandler)
   .on("GET", /^\/player\/[^/]+$/, playerHandler)
-  .on("GET", /^\/leaderboards$/, leaderboardsHandler)
+  .on("GET", /^\/leaderboards(?:\?.*)?$/, leaderboardsHandler)
   .on("GET", /^\/player\/[^/]+\/advancements$/, playerAdvancementsHandler);
 
 http.createServer((req, res) => {
