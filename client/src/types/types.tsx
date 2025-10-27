@@ -36,3 +36,6 @@ export type PlayerWithAll = PlayerSummary & {
 };
 
 export type AdvMerged = { id: string; title: string; parent: string | null; done: boolean; when: string | null };
+
+// Leaderboard row
+export type LbRow = { name: string; uuid: string; value: number; extra?: Record<string, number> };

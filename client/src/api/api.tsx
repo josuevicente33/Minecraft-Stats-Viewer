@@ -1,6 +1,6 @@
 const BASE = import.meta.env.VITE_API_BASE || "/api";
 
-import type { PlayerSummary, PlayerWithAll, AdvMerged } from "../types/types";
+import type { PlayerSummary, PlayerWithAll, AdvMerged, LbRow } from "../types/types";
 
 //PLAYER API
 export async function getStatus() {
@@ -41,4 +41,11 @@ export async function getLeaderboards() {
     const r = await fetch(`${BASE}/leaderboards`);
     if (!r.ok) throw new Error(`status ${r.status}`);
     return (await r.json()) as Array<{ name: string; playTimeHours: number; deaths: number; mobKills: number; playerKills: number; jumps: number; walkKm: number; flyKm: number }>;
+}
+
+export async function getLeaderboard(metric: string, order: "asc"|"desc", limit = 50) {
+    const BASE = import.meta.env.VITE_API_BASE || "/api";
+    const r = await fetch(`${BASE}/leaderboards?metric=${encodeURIComponent(metric)}&order=${order}&limit=${limit}`);
+    if (!r.ok) throw new Error(`status ${r.status}`);
+    return r.json() as Promise<{ metric: string; order: "asc"|"desc"; limit: number; rows: LbRow[]; total: number }>;
 }
