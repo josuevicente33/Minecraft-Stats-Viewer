@@ -4,17 +4,14 @@ import path from "node:path";
 import AdmZip from "adm-zip";
 
 type LangMap = Record<string, string>;
-
-// key for cache: `${version}:${namespace}` (e.g. "1.21.10:minecraft")
 const LANG_CACHE = new Map<string, LangMap>();
 
-/**
- * formatString supports:
- *  - positional: "%1$s", "%2$s"
- *  - simple: "%s" (consumes args in order)
- */
+function getCacheKey(version: string, ns: string) {
+    return `${version}:${ns}`;
+}
+
+// formatString supports: - positional: "%1$s", "%2$s", simple: "%s" (consumes args in order)
 function formatString(template: string, args: Array<string | number> = []): string {
-    // positional: %1$s style
     let out = template.replace(/%([0-9]+)\$s/g, (_, n) => {
         const idx = Number(n) - 1;
         return args[idx] != null ? String(args[idx]) : "";
@@ -37,7 +34,7 @@ function formatString(template: string, args: Array<string | number> = []): stri
  * filePath: absolute path to en_us.json
  */
 export async function loadLangFile(version: string, ns: string, filePath: string): Promise<LangMap | null> {
-    const cacheKey = `${version}:${ns}`;
+    const cacheKey = getCacheKey(version, ns);
     if (LANG_CACHE.has(cacheKey)) return LANG_CACHE.get(cacheKey)!;
 
     try {
@@ -57,7 +54,7 @@ export async function loadLangFile(version: string, ns: string, filePath: string
  * ns: "minecraft"
  */
 export async function loadLangFromJar(jarPath: string, version: string, ns = "minecraft", locale = "en_us"): Promise<LangMap | null> {
-    const cacheKey = `${version}:${ns}`;
+    const cacheKey = getCacheKey(version, ns);
     if (LANG_CACHE.has(cacheKey)) return LANG_CACHE.get(cacheKey)!;
 
     try {
@@ -78,7 +75,7 @@ export async function loadLangFromJar(jarPath: string, version: string, ns = "mi
  * version: the version string used for the index file, e.g. "1.21.10"
  */
 export async function loadLangViaAssetsIndex(rootMinecraftDir: string, version: string, ns = "minecraft", locale = "en_us"): Promise<LangMap | null> {
-    const cacheKey = `${version}:${ns}`;
+    const cacheKey = getCacheKey(version, ns);
     if (LANG_CACHE.has(cacheKey)) return LANG_CACHE.get(cacheKey)!;
 
     try {
@@ -108,7 +105,7 @@ export async function loadLangViaAssetsIndex(rootMinecraftDir: string, version: 
  * version + ns determine which cached map to use
  */
 export function resolveLang(version: string, ns: string, key: string, args: Array<string | number> = []): string {
-    const cacheKey = `${version}:${ns}`;
+    const cacheKey = getCacheKey(version, ns);
     const map = LANG_CACHE.get(cacheKey);
     if (!map) return key; // fallback: give the key so caller knows it's unresolved
     const templ = map[key];
@@ -140,26 +137,11 @@ export function enrichAdvCatalog<T extends CatalogRowInBase = CatalogRowInBase>(
     rows: T[],
     version: string
 ): Array<T & { title: string; description: string; namespace: string }> {
-    return rows.map((r) => {
+    return rows.map(r => {
         const ns = r.namespace ?? (r.id.includes(":") ? r.id.split(":")[0] : "minecraft");
-
-        // Resolve title: prefer literal title, then titleKey -> localized, else fallback to id
-        let title = (r as any).title as string | undefined;
-        if (!title && r.titleKey) title = resolveLang(version, ns, r.titleKey);
-        if (!title) title = (r as any).title ?? r.id;
-
-        // Resolve description: prefer literal description, then descriptionKey -> localized, else ""
-        let description = (r as any).description as string | undefined;
-        if (!description && r.descriptionKey) description = resolveLang(version, ns, r.descriptionKey);
-        if (!description) description = (r as any).description ?? "";
-
-        // Return a new object that spreads all original fields and overwrites/ensures the resolved ones
-        return {
-        ...r,
-        title,
-        description,
-        namespace: ns,
-        } as T & { title: string; description: string; namespace: string };
+        const title = r.title ?? (r.titleKey ? resolveLang(version, ns, r.titleKey) : r.id);
+        const description = r.description ?? (r.descriptionKey ? resolveLang(version, ns, r.descriptionKey) : "");
+        return { ...r, title, description, namespace: ns } as T & { title: string; description: string; namespace: string };
     });
 }
 
