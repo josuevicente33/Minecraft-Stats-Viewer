@@ -18,7 +18,7 @@ export async function playersHandler(_req: http.IncomingMessage, res: http.Serve
         rows = MOCK_PLAYERS;
     } else {
         const maps = await loadUserCache();
-        rows = (await listPlayerUUIDs()).map(uuid => ({ uuid, name: maps.byUUID.get(uuid) ?? uuid }));
+        rows = (await listPlayerUUIDs()).map(uuid => ({ uuid, name: maps.byUUID.get(uuid?.replace(/-/g, "")) ?? uuid }));
     }
     setCache("players", rows);
     sendJSON(res, 200, rows);

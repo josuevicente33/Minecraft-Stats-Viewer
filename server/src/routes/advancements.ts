@@ -2,67 +2,7 @@ import type http from "node:http";
 import { sendJSON } from "../lib/response.js";
 import { loadUserCacheWithSeen, readAdvancements } from "../services/world.js";
 import { getAdvCatalog } from "../services/advCatalog.js";
-import { MOCK } from "../config.js";
-
-export const MOCK_ADV_MAP: Record<string, any> = {
-    // "minecraft:story/mine_stone": {
-    //     done: "2025-10-25T12:00:00Z",
-    //     criteria: { any: "2025-10-25T12:00:00Z" },
-    // },
-    // "minecraft:adventure/kill_a_mob": {
-    //     done: "2025-10-26T15:30:00Z",
-    //     criteria: { any: "2025-10-26T15:30:00Z" },
-    // },
-    // "minecraft:nether/return_to_sender": {
-    //     done: "2025-10-26T18:45:00Z",
-    //     criteria: { any: "2025-10-26T18:45:00Z" },
-    // },
-    // // use valid End IDs:
-    // "minecraft:end/kill_dragon": {
-    //     done: "2025-10-26T20:00:00Z",
-    //     criteria: { any: "2025-10-26T20:00:00Z" },
-    // },
-    // "minecraft:end/dragon_egg": {
-    //     done: "2025-10-26T20:00:00Z",
-    //     criteria: { any: "2025-10-26T20:00:00Z" },
-    // },
-    // "minecraft:adventure/adventuring_time": {
-    //     done: "2025-10-26T20:00:00Z",
-    //     criteria: { any: "2025-10-26T20:00:00Z" },
-    // },
-    // "minecraft:story/enter_the_nether": {
-    //     done: "2025-10-26T20:00:00Z",
-    //     criteria: { any: "2025-10-26T20:00:00Z" },
-    // },
-    // "minecraft:story/enter_the_end": {
-    //     done: "2025-10-26T20:00:00Z",
-    //     criteria: { any: "2025-10-26T20:00:00Z" },
-    // },
-    // "minecraft:story/upgrade_tools": {
-    //     done: "2025-10-26T20:00:00Z",
-    //     criteria: { any: "2025-10-26T20:00:00Z" },
-    // },
-    // "minecraft:story/smelt_iron": {
-    //     done: "2025-10-26T20:00:00Z",
-    //     criteria: { any: "2025-10-26T20:00:00Z" },
-    // },
-    // "minecraft:story/prepare_to_ride": {
-    //     done: "2025-10-26T20:00:00Z",
-    //     criteria: { any: "2025-10-26T20:00:00Z" },
-    // },
-};
-
-function latestCriteriaTime(v: any): string | null {
-    if (typeof v?.done === "string") return v.done;
-    const crit = v?.criteria && Object.values(v.criteria);
-
-    if (Array.isArray(crit) && crit.length) {
-        return crit.reduce((a: string, b: string) => (a > b ? a : b));
-    }
-    if (Array.isArray(v?.granted) && v.granted.length) return v.granted.reduce((a: string, b: string) => (a > b ? a : b));
-    if (v?.done === true) return "true";
-    return null;
-}
+import { extractPlayerKey, latestCriteriaTime } from "../lib/util.js";
 
 function parentGetter(catalog: { id: string; parent?: string | null }[]) {
   const byId = new Map(catalog.map(x => [x.id, x.parent ?? null]));
@@ -77,12 +17,19 @@ function computeState(id: string, doneSet: Set<string>, parentOf: (id: string) =
     return doneSet.has(p) ? "available" : "locked";
 }
 
-
 export async function playerAdvancementsHandler(req: http.IncomingMessage, res: http.ServerResponse) {
     const rawUrl = req.url || "/";
-    const key = decodeURIComponent(rawUrl.split("/").pop() || "");
+    const key = extractPlayerKey(rawUrl);
+    if (!key) {
+        res.statusCode = 400;
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({ error: "Invalid URL. Expected /player/:key/advancements" }));
+        return;
+    }
+
     const maps = await loadUserCacheWithSeen();
-    const uuid = (maps.byName.get(key) ?? key).replace(/-/g, "");
+    const isUuid =/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(key);
+    const uuid = isUuid ? key : (maps.byName.get(key) || maps.byName.get(key.toLowerCase()) || key);
 
     const [catalog, advFromDisk] = await Promise.all([
         getAdvCatalog(),
@@ -90,9 +37,6 @@ export async function playerAdvancementsHandler(req: http.IncomingMessage, res: 
     ]);
 
     let playerMap: Record<string, any> = advFromDisk;
-    if (MOCK) {
-        playerMap = { ...playerMap, ...MOCK_ADV_MAP };
-    }
 
     const prelim = catalog.map(c => {
         const v: any = playerMap[c.id];
