@@ -1,5 +1,7 @@
 const BASE = import.meta.env.VITE_API_BASE || "/api";
 
+import type { PlayerSummary, PlayerWithAll } from "../types/types";
+
 export async function getStatus() {
     const r = await fetch(`${BASE}/status`);
     if (!r.ok) throw new Error(`status ${r.status}`);
@@ -12,47 +14,16 @@ export async function getPlayers() {
     return (await r.json()) as Array<{ uuid: string; name: string }>;
 }
 
-
-// export async function getPlayer(nameOrUuid: string) {
-//     const r = await fetch(`${BASE}/player/${encodeURIComponent(nameOrUuid)}`);
-//     if (!r.ok) throw new Error(`status ${r.status}`);
-//     return (await r.json()) as {
-//         name: string;
-//         uuid: string;
-//         stats: {
-//         playTime: number;
-//         deaths: number;
-//         mobKills: number;
-//         playerKills: number;
-//         jumps: number;
-//         walkCm: number;
-//         flyCm: number;
-//         };
-//         advancements?: Record<string, unknown> | null;
-//     };
-// }
-
 export async function getPlayer(nameOrUuid: string) {
     const r = await fetch(`${BASE}/player/${encodeURIComponent(nameOrUuid)}`);
     if (!r.ok) throw new Error(`status ${r.status}`);
-    return (await r.json()) as {
-        name: string; uuid: string;
-        stats: {
-            playTime: number; deaths: number; mobKills: number; playerKills: number;
-            jumps: number; walkCm: number; flyCm: number; boatCm: number; minecartCm: number;
-            horseCm: number; swimCm: number; damageDealt: number; damageTaken: number;
-            timeSinceDeath: number; timeSinceRest: number;
-        };
-        top: {
-            mined: { id: string; value: number }[];
-            used: { id: string; value: number }[];
-            broken: { id: string; value: number }[];
-            mobsKilled: { id: string; value: number }[];
-            killedBy: { id: string; value: number }[];
-        };
-        advancementsCount: number;
-        recentAdvancements: { id: string; when: string }[];
-    };
+    return (await r.json()) as PlayerSummary;
+}
+
+export async function getPlayerWithAdvancements(nameOrUuid: string) {
+    const response = await fetch(`${BASE}/player/${encodeURIComponent(nameOrUuid)}?include=all`);
+    if (!response.ok) throw new Error(`status ${response.status}`);
+    return (await response.json()) as PlayerWithAll;
 }
 
 export async function getLeaderboards() {
