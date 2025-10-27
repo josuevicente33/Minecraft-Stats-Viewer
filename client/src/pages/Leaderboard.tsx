@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getLeaderboard } from "../api/api";
 import { type LbRow } from "../types/types";
@@ -31,20 +31,24 @@ export default function Leaderboard() {
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState<string | null>(null);
 
-    async function load() {
+    const load = useCallback(async () => {
         setLoading(true);
         try {
             const res = await getLeaderboard(metric, order, limit);
             setRows(res.rows);
             setErr(null);
-        } catch (e: any) {
-            setErr(e.message ?? "Failed to load leaderboard");
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setErr(e.message ?? "Failed to load leaderboard");
+            } else {
+                setErr(String(e) || "Failed to load leaderboard");
+            }
         } finally {
             setLoading(false);
         }
-    }
+    }, [metric, order, limit]);
 
-    useEffect(() => { void load(); }, [metric, order, limit]);
+    useEffect(() => { void load(); }, [metric, order, limit, load]);
 
     return (
         <div className="mx-auto max-w-5xl p-4 sm:p-6">
@@ -67,7 +71,7 @@ export default function Leaderboard() {
 
                     <select
                         value={order}
-                        onChange={(e)=>setOrder(e.target.value as any)}
+                        onChange={(e)=>setOrder(e.target.value as "asc" | "desc")}
                         className="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm dark:border-gray-800 dark:bg-gray-950"
                     >
                         <option value="desc">Desc</option>

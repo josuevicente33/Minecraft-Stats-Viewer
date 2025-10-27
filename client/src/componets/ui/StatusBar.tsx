@@ -14,7 +14,7 @@ export default function StatusBar() {
         try {
             const s = await getStatus();
             if (alive) { setData(s); setErr(null); }
-        } catch (e: any) { if (alive) setErr(e.message ?? "Failed to fetch status"); }
+        } catch (e: unknown) { if (alive) setErr(e instanceof Error ? e.message : String(e) || "Failed to fetch status"); }
         };
         load();
         const id = setInterval(load, 15000);

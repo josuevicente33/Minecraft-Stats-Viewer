@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getPlayers } from "../../api/api";
 import type { Player } from "../../types/types";
 import { Link } from "react-router-dom";
@@ -9,25 +9,29 @@ export default function PlayerList() {
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState<string | null>(null);
 
-    const load = async () => {
+    const load = useCallback(async () => {
         try {
             setLoading(true);
             const data = await getPlayers();
             setPlayers(data);
             setErr(null);
-        } catch (e: any) {
-            setErr(e.message ?? "Failed to load players");
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setErr(e.message ?? "Failed to load players");
+            } else {
+                setErr(String(e) || "Failed to load players");
+            }
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         let alive = true;
         (async () => { await load(); })();
         const id = setInterval(() => alive && load(), 30000);
         return () => { alive = false; clearInterval(id); };
-    }, []);
+    }, [load]);
 
     return (
         <Card>

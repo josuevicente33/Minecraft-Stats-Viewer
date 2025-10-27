@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 
 // API AND TYPES
@@ -33,25 +33,33 @@ export default function Player() {
             const res = await getAdvancementsMerged(id);
             setFullAdv(res);
             setFullErr(null);
-        } catch (e: any) {
-            setFullErr(e?.message ?? "Failed to load advancements");
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setFullErr(e.message ?? "Failed to load advancements");
+            } else {
+                setFullErr(String(e) || "Failed to load advancements");
+            }
         } finally {
             setFullLoading(false);
         }
     };
 
-    const loadSummary = async () => {
+    const loadSummary = useCallback(async () => {
         setLoading(true);
         try {
             const data = await getPlayer(id);
             setData(data);
             setErr(null);
-        } catch (e: any) {
-            setErr(e.message ?? "Failed to load player");
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setErr(e.message ?? "Failed to load player");
+            } else {
+                setErr(String(e) || "Failed to load player");
+            }
         } finally {
             setLoading(false);
         }
-    };
+    }, [id]);
 
     const refresh = async () => { await loadSummary(); };
 
@@ -64,7 +72,7 @@ export default function Player() {
         setQuery("");
         setFilter("all");
         void loadSummary();
-    }, [id]);
+    }, [id, loadSummary]);
 
     const advTotal = data?.advancements?.total ?? 0;
     const recentAdv = data?.advancements?.recent ?? [];
@@ -214,7 +222,7 @@ export default function Player() {
                         />
                         <select
                             value={filter}
-                            onChange={(e)=>setFilter(e.target.value as any)}
+                            onChange={(e)=>setFilter(e.target.value as "all"|"done"|"todo"|"available"|"locked")}
                             className="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm dark:border-gray-800 dark:bg-gray-950"
                         >
                             <option value="all">All</option>
