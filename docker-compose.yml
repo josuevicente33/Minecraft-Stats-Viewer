@@ -22,7 +22,7 @@ services:
       retries: 3
 
   client:
-    build: ./client
+    context: ./client
     image: jvicente/mc-stats-client:latest
     ports:
       - "127.0.0.1:${CLIENT_PORT}:80"
