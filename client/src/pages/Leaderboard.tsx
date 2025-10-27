@@ -44,8 +44,6 @@ export default function Leaderboard() {
         }
     }
 
-    console.log({ metric, order, limit, rows });
-
     useEffect(() => { void load(); }, [metric, order, limit]);
 
     return (
@@ -129,7 +127,7 @@ export default function Leaderboard() {
                                     <td className="px-4 py-2">
                                         <div className="flex items-center gap-2">
                                             <img src={avatarUrl(r.uuid)} alt="" className="h-6 w-6 rounded" />
-                                            <Link to={`/players/${encodeURIComponent(r.name)}`} className="text-blue-600 hover:underline dark:text-blue-400">
+                                            <Link to={`/players/${encodeURIComponent(r.uuid)}`} className="text-blue-600 hover:underline dark:text-blue-400">
                                                 {r.name}
                                             </Link>
                                             </div>

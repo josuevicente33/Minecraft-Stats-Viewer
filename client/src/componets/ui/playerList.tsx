@@ -11,14 +11,14 @@ export default function PlayerList() {
 
     const load = async () => {
         try {
-        setLoading(true);
-        const data = await getPlayers();
-        setPlayers(data);
-        setErr(null);
+            setLoading(true);
+            const data = await getPlayers();
+            setPlayers(data);
+            setErr(null);
         } catch (e: any) {
-        setErr(e.message ?? "Failed to load players");
+            setErr(e.message ?? "Failed to load players");
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     };
 
