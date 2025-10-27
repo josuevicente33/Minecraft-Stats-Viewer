@@ -22,6 +22,10 @@ export default function Header() {
             Home
           </NavLink>
 
+          <NavLink to="/world" className={({ isActive }) => `${linkBase} ${isActive ? linkActive : linkIdle}`}>
+            World
+          </NavLink>
+
           <NavLink to="/players" className={({ isActive }) => `${linkBase} ${isActive ? linkActive : linkIdle}`}>   
             Players
           </NavLink>

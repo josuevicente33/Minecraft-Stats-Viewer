@@ -5,6 +5,7 @@ import Layout from './componets/layout/Layout'
 
 //Pages
 import Home from './pages/Home'
+import World from './pages/World'
 import Players from './pages/Players'
 import Player from './pages/Player'
 import Leaderboard from './pages/Leaderboard'
@@ -20,6 +21,7 @@ function App() {
         <Routes>
 
           <Route path="/" element={<Home />} />
+          <Route path="/world" element={<World />} />
           <Route path="/players" element={<Players />} />
           <Route path="/players/:id" element={<Player />} />
           <Route path="/leaderboard" element={<Leaderboard />} />

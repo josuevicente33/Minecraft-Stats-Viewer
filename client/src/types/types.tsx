@@ -28,10 +28,11 @@ export type PlayerSummary = {
   advancements: {
     total: number;
     recent: AdvItem[];
-    // no "all" here
   };
 };
 
 export type PlayerWithAll = PlayerSummary & {
   advancements: PlayerSummary["advancements"] & { all: AdvItem[] };
 };
+
+export type AdvMerged = { id: string; title: string; parent: string | null; done: boolean; when: string | null };
