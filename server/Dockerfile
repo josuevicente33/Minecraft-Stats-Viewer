@@ -12,6 +12,6 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/dist ./dist
 
 RUN npm ci --production
-EXPOSE 4002
+EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:4002/health || exit 1
 CMD ["node", "src/server.ts"]
