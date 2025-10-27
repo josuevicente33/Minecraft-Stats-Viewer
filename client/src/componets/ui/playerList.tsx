@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getPlayers } from "../../api/api";
 import type { Player } from "../../types/types";
+import { Link } from "react-router-dom";
 import Card from "./Card";
 
 export default function PlayerList() {
@@ -56,10 +57,15 @@ export default function PlayerList() {
                     <tbody>
                         {players.map((p, i) => (
                             <tr key={p.uuid} className={i % 2 ? "bg-white dark:bg-gray-950" : "bg-gray-50/50 dark:bg-gray-900/30"}>
-                            <td className="px-3 py-2">{p.name}</td>
-                            <td className="px-3 py-2">
-                                <code className="rounded bg-gray-100 px-1.5 py-0.5 text-xs dark:bg-gray-800">{p.uuid}</code>
-                            </td>
+                                <td className="px-3 py-2">
+                                    <Link to={`/player/${encodeURIComponent(p.uuid)}`} className="text-blue-600 hover:underline dark:text-blue-400">
+                                        {p.name}
+                                    </Link>
+                                </td>
+
+                                <td className="px-3 py-2">
+                                    <code className="rounded bg-gray-100 px-1.5 py-0.5 text-xs dark:bg-gray-800">{p.uuid}</code>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
