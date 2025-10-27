@@ -1,8 +1,24 @@
+import { useEffect } from "react";
+import PlayerList from "../componets/ui/playerList";
+import StatusBar from "../componets/ui/StatusBar";
+
 export default function Home() {
+
+    useEffect(() => {
+        (async () => {
+            const s = await fetch("/api/status").then(r => r.json());
+            const players = await fetch("/api/players").then(r => r.json());
+            const l = await fetch("/api/leaderboards").then(r => r.json());
+            console.log({ s, players, l });
+        })();
+    }, []);
+
     return (
         <div className="p-4">
-            <h2 className="text-xl font-semibold mb-4">Welcome to Minecraft Stats Viewer</h2>
-            <p>This is a placeholder for the main content.</p>
+            <div className="mt-6">
+                <StatusBar />
+                <PlayerList />
+            </div>
         </div>
     );
 }

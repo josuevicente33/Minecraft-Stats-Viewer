@@ -7,9 +7,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="h-screen flex flex-col overflow-hidden">
         <Header />
 
-        <main className="flex-grow overflow-y-auto flex flex-col">
+        <main className="grow overflow-y-auto flex flex-col">
             
-                <div className="flex-grow w-full">
+                <div className="grow w-full">
                     {children}
                 </div>
 
