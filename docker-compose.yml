@@ -1,0 +1,42 @@
+name: minecraft-stats-viewer
+services:
+  backend:
+    build: ./backend
+    image: jvicente/mc-stats-api:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - PORT=${PORT}
+      - SERVER_JAR=${SERVER_JAR}
+      - CLIENT_JAR=${CLIENT_JAR}
+      - LOCAL_ASSETS_DIR=${LOCAL_ASSETS_DIR}
+    volumes:
+      - ${HOST_BACKEND_DATA}:/app/src/data
+      - ${MINECRAFT_WORLD_DIR}:/app/src/data/world:ro
+    ports:
+      - "127.0.0.1:${PORT}:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      restart: unless-stopped
+
+  client:
+    build: ./client
+    image: jvicente/mc-stats-client:latest
+    env_file: .env
+    ports:
+      - "127.0.0.1:${CLIENT_PORT}:80"
+    restart: unless-stopped
+
+  tunnel:
+    image: cloudflare/cloudflared:2025.8.1
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      web:
+        condition: service_started
+    restart: unless-stopped
+    profiles: ["prod"]
