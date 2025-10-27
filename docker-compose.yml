@@ -2,7 +2,7 @@ name: minecraft-stats-viewer
 
 services:
   backend:
-    build: ./backend
+    build: ./server
     image: jvicente/mc-stats-api:latest
     restart: unless-stopped
     environment:
