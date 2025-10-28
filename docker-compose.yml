@@ -11,7 +11,7 @@ services:
       - CLIENT_JAR=${CLIENT_JAR}
 
       - ORIGIN_DATA=/mcroot
-      - WORLD_DIR=/world
+      - ORIGIN_WORLD=/world
       - LOCAL_DATA=/data
       - ASSETS_DIR=/assets
       
