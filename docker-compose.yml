@@ -21,10 +21,6 @@ services:
     networks:
       - default
       - vanilla_default
-  
-  networks:
-    vanilla_default:
-      external: true
       
     volumes:
       - ${ORIGIN_DATA}:/mcroot:ro
@@ -58,3 +54,7 @@ services:
     depends_on: [backend, client]
     restart: unless-stopped
     profiles: ["prod"]
+
+networks:
+  vanilla_default:
+    external: true
