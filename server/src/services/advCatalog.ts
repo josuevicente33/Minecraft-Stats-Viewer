@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import AdmZip from "adm-zip";
 import { fileURLToPath } from "node:url";
-import { LOCAL_DATA_DIR } from "../config";
+import { LOCAL_DATA_DIR } from "../config.js";
 
 type CatalogRow = {
     id: string;
