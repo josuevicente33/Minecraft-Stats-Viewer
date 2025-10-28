@@ -38,6 +38,8 @@ export async function getAdvCatalog(): Promise<CatalogRow[]> {
         }
     }
 
+    console.log("[advCatalog] loading bundled advancements catalog from", BUNDLED);
+
     try {
         const txt = await fs.readFile(BUNDLED, "utf8");
         return (memo = JSON.parse(txt));
