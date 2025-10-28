@@ -9,15 +9,16 @@ services:
       - PORT=${PORT}
       - SERVER_JAR=${SERVER_JAR}
       - CLIENT_JAR=${CLIENT_JAR}
-      - LOCAL_DATA=/data/local
+      - LOCAL_ASSETS_DIR=/data/assets
       - MINECRAFT_ROOT=/mcroot
       - WORLD_DIR=/data/world
       - DATA_DIR=/data
+      - LOCAL_ASSETS=${LOCAL_ASSETS_DIR}
     volumes:
       - ${HOST_BACKEND_DATA}:/data
       - ${MINECRAFT_WORLD_DIR}:/data/world:ro
       - ${MINECRAFT_ROOT}:/mcroot:ro
-      - ${LOCAL_DATA}:/data/local:ro
+      - ${LOCAL_ASSETS_HOST}:/data/assets:ro
     ports:
       - "${PORT}:8080"
     healthcheck:
