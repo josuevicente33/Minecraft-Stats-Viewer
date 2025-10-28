@@ -1,4 +1,4 @@
-export type StatusOut = { online: number; max: number; names: string[]; raw?: string };
+export type StatusOut = { online: number; max: number; names: string[]; raw: string }
 
 const ns = (raw: any, name: string) => (raw?.stats?.[name] ?? {}) as Record<string, number>;
 const topN = (obj: Record<string, number>, n = 5) =>
@@ -44,10 +44,13 @@ export function extractProfile(raw: any) {
     };
 }
 
-export function parseListOutput(s: string): StatusOut {
-    const m = /There are (\d+) of a max of (\d+) players online: ?(.*)/.exec(s);
-    const names = m?.[3] ? m[3].split(",").map(x => x.trim()).filter(Boolean) : [];
-    return { online: Number(m?.[1] ?? 0), max: Number(m?.[2] ?? 0), names, raw: s };
+export function parseListOutput(raw: string): StatusOut {
+    const m = raw.match(/There are (\d+) of a max of (\d+) players online(?::\s*(.*))?$/i);
+    if (!m) return { online: 0, max: 0, names: [], raw };
+    const online = parseInt(m[1], 10);
+    const max = parseInt(m[2], 10);
+    const names = (m[3]?.trim() ? m[3].split(/\s*,\s*/).filter(Boolean) : []);
+    return { online, max, names, raw };
 }
 
 export function prettyStats(raw: any) {
