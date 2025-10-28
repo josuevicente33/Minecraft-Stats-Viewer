@@ -2,7 +2,7 @@ import type http from "node:http";
 import path from "node:path";
 import fs from "node:fs/promises";
 import { sendJSON } from "../lib/response.js";
-import { WORLD_DIR } from "../config.js";
+import { ORIGIN_WORLD } from "../config.js";
 import { loadUserCacheWithSeen, readPlayerStatsRaw, readAdvancements } from "../services/world.js";
 import { extractProfile } from "../services/profile.js";
 import { getAdvCatalog } from "../services/advCatalog.js";
@@ -38,7 +38,7 @@ export async function leaderboardsHandler(req: http.IncomingMessage, res: http.S
 
     try {
         const maps = await loadUserCacheWithSeen();
-        const statDir = path.join(WORLD_DIR, "stats");
+        const statDir = path.join(ORIGIN_WORLD, "stats");
         const files = (await fs.readdir(statDir)).filter(f => f.endsWith(".json"));
 
         const wantAdv = metric === "advancements";

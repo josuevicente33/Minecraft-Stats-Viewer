@@ -2,7 +2,6 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import AdmZip from "adm-zip";
 import { fileURLToPath } from "node:url";
-import { LOCAL_DATA_DIR } from "../config.js";
 
 type CatalogRow = {
     id: string;
@@ -21,7 +20,7 @@ type CatalogRow = {
 };  
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const BUNDLED = path.resolve(LOCAL_DATA_DIR, "advancements-vanilla.json");
+const BUNDLED = path.resolve(__dirname,"advancements-vanilla.json");
 const SERVER_JAR = process.env.SERVER_JAR || "";
 
 let memo: CatalogRow[] | null = null;
@@ -38,7 +37,6 @@ export async function getAdvCatalog(): Promise<CatalogRow[]> {
         }
     }
 
-    console.log("[advCatalog] loading bundled advancements catalog from", BUNDLED);
 
     try {
         const txt = await fs.readFile(BUNDLED, "utf8");

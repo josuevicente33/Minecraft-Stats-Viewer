@@ -4,6 +4,7 @@ import { loadUserCacheWithSeen, readAdvancements } from "../services/world.js";
 import { getAdvCatalog } from "../services/advCatalog.js";
 import { extractPlayerKey, latestCriteriaTime } from "../lib/util.js";
 import { loadLangFile, loadLangFromJar, enrichAdvCatalog } from "../services/langResolver.js";
+import { LOCAL_EN_US } from "../config.js";
 import path from "node:path";
 
 function parentGetter(catalog: { id: string; parent?: string | null }[]) {
@@ -41,7 +42,6 @@ export async function playerAdvancementsHandler(req: http.IncomingMessage, res: 
     let playerMap: Record<string, any> = advFromDisk;
 
     const MC_VERSION = "1.21.10";
-    const LOCAL_EN_US = path.resolve(process.env.LOCAL_ASSETS_DIR || "");
     const CLIENT_JAR = process.env.CLIENT_JAR || "";
 
     if (CLIENT_JAR) {
