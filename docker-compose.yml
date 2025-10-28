@@ -16,7 +16,7 @@ services:
     volumes:
       - ${HOST_BACKEND_DATA}:/data
       - ${MINECRAFT_WORLD_DIR}:/data/world:ro
-      - ${MINECRAFT_ROOT_DIR}:/mcroot:ro
+      - ${MINECRAFT_ROOT}:/mcroot:ro
     ports:
       - "${PORT}:8080"
     healthcheck:
