@@ -31,11 +31,11 @@ services:
     restart: unless-stopped
     profiles: [prod]
 
-cloudflared:
-  image: cloudflare/cloudflared:2025.8.1
-  environment:
-    - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
-  command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
-  depends_on: [backend, client]
-  restart: unless-stopped
-  profiles: ["prod"]
+  cloudflared:
+    image: cloudflare/cloudflared:2025.8.1
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on: [backend, client]
+    restart: unless-stopped
+    profiles: ["prod"]
