@@ -19,7 +19,7 @@ type CatalogRow = {
     hidden?: boolean;
 };  
 
-const BUNDLED = path.join(LOCAL_DATA, "advancements_catalog.json");
+const BUNDLED = path.join(LOCAL_DATA, "advancements-vanilla.json");
 const SERVER_JAR = process.env.SERVER_JAR || "";
 
 let memo: CatalogRow[] | null = null;
