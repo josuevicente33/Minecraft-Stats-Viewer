@@ -14,6 +14,17 @@ services:
       - ORIGIN_WORLD=/world
       - LOCAL_DATA=/data
       - ASSETS_DIR=/assets
+      - RCON_HOST=mc
+      - RCON_PORT=${RCON_PORT}
+      - RCON_PASSWORD=${RCON_PASSWORD}
+      - RCON_TIMEOUT_MS=${RCON_TIMEOUT_MS}
+    networks:
+      - default
+      - vanilla_defaults
+  
+  networks:
+    vanilla_defaults:
+      external: true
       
     volumes:
       - ${ORIGIN_DATA}:/mcroot:ro

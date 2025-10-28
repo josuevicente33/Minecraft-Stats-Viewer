@@ -31,16 +31,16 @@ export async function statusHandler(_req: http.IncomingMessage, res: http.Server
     } catch {
         // Fallback: Basic TCP ping — counts only
         try {
-        const ping = await serverListPing(
-            process.env.MC_SERVER_HOST || "host.docker.internal",
-            +(process.env.MC_SERVER_PORT || 25565)
-        );
-        out = {
-            online: ping.players?.online ?? 0,
-            max: ping.players?.max ?? 0,
-            names: [],
-            raw: "fallback:ping"
-        };
+            const ping = await serverListPing(
+                process.env.MC_SERVER_HOST || "host.docker.internal",
+                +(process.env.MC_SERVER_PORT || 25565)
+            );
+            out = {
+                online: ping.players?.online ?? 0,
+                max: ping.players?.max ?? 0,
+                names: [],
+                raw: "fallback:ping"
+            };
         } catch {
         out = { online: 0, max: 0, names: [], raw: "fallback:error" };
         }
