@@ -9,7 +9,7 @@ services:
       - PORT=${PORT}
       - SERVER_JAR=${SERVER_JAR}
       - CLIENT_JAR=${CLIENT_JAR}
-      - LOCAL_DATA=/data
+      - LOCAL_DATA=/data/local
       - MINECRAFT_ROOT=/mcroot
       - WORLD_DIR=/data/world
       - DATA_DIR=/data
