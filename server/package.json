@@ -15,6 +15,7 @@
   "dependencies": {
     "adm-zip": "^0.5.16",
     "dotenv": "^17.2.3",
+    "minecraft-server-util": "^5.4.4",
     "rcon-client": "^4.2.5"
   },
   "devDependencies": {

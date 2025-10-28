@@ -44,14 +44,51 @@ export function extractProfile(raw: any) {
     };
 }
 
-export function parseListOutput(raw: string): StatusOut {
-    const m = raw.match(/There are (\d+) of a max of (\d+) players online(?::\s*(.*))?$/i);
-    if (!m) return { online: 0, max: 0, names: [], raw };
-    const online = parseInt(m[1], 10);
-    const max = parseInt(m[2], 10);
-    const names = (m[3]?.trim() ? m[3].split(/\s*,\s*/).filter(Boolean) : []);
-    return { online, max, names, raw };
+/**
+ * Handles common vanilla/Paper/Spigot formats:
+ *  - "There are 1 of a max of 20 players online: Steve"
+ *  - "There are 0 of a max of 20 players online"
+ *  - "Players (2/20): Steve, Alex"
+ *  - Paper sometimes returns with color codes; we strip those.
+ */
+export function parseListOutput(out: string): StatusOut {
+    const cleaned = stripMinecraftColors(out).trim();
+
+    // Try "Players (x/y): name, name"
+    {
+        const m = cleaned.match(/Players\s*\((\d+)\s*\/\s*(\d+)\)\s*:\s*(.*)$/i);
+        if (m) {
+        const online = +m[1], max = +m[2];
+        const names = online > 0 && m[3] ? m[3].split(",").map(s => s.trim()).filter(Boolean) : [];
+        return { online, max, names, raw: "rcon:list" };
+        }
+    }
+    // Try vanilla "There are x of a max of y players online: a, b"
+    {
+        const m = cleaned.match(/There are\s+(\d+)\s+of a max of\s+(\d+)\s+players online:? ?(.*)$/i);
+        if (m) {
+        const online = +m[1], max = +m[2];
+        const names = online > 0 && m[3] ? m[3].split(",").map(s => s.trim()).filter(Boolean) : [];
+        return { online, max, names, raw: "rcon:list" };
+        }
+    }
+    // Fallback: just pull numbers if present
+    {
+        const m = cleaned.match(/(\d+)\s*\/\s*(\d+)/);
+        if (m) {
+        const online = +m[1], max = +m[2];
+        return { online, max, names: [], raw: "rcon:list" };
+        }
+    }
+    // Unknown format
+    return { online: 0, max: 0, names: [], raw: "rcon:list:unparsed:" + cleaned };
 }
+
+export function stripMinecraftColors(s: string): string {
+    // §x color codes and &x common alternates
+    return s.replace(/§[0-9A-FK-ORa-fk-or]|&[0-9A-FK-ORa-fk-or]/g, "");
+}
+
 
 export function prettyStats(raw: any) {
     const g = raw?.stats ?? {};
