@@ -10,7 +10,7 @@ services:
       - SERVER_JAR=${SERVER_JAR}
       - CLIENT_JAR=${CLIENT_JAR}
       - LOCAL_ASSETS_DIR=${LOCAL_ASSETS_DIR}
-      - MINECRAFT_ROOT=${MINECRAFT_ROOT}
+      - MINECRAFT_ROOT=/mcroot
       - WORLD_DIR=/data/world
       - DATA_DIR=/data
     volumes:
