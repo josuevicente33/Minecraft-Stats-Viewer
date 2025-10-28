@@ -10,9 +10,11 @@ services:
       - SERVER_JAR=${SERVER_JAR}
       - CLIENT_JAR=${CLIENT_JAR}
       - LOCAL_ASSETS_DIR=${LOCAL_ASSETS_DIR}
+      - WORLD_DIR=${MINECRAFT_WORLD_DIR}
+      - DATA_DIR=./data
     volumes:
-      - ${HOST_BACKEND_DATA}:/app/src/data
-      - ${MINECRAFT_WORLD_DIR}:/app/src/data/world:ro
+      - ${HOST_BACKEND_DATA}:/data
+      - ${MINECRAFT_WORLD_DIR}:/data/world:ro
     ports:
       - "${PORT}:8080"
     healthcheck:
