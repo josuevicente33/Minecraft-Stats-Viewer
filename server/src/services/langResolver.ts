@@ -2,6 +2,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import AdmZip from "adm-zip";
+import { LOCAL_DATA_DIR } from "../config";
 
 type LangMap = Record<string, string>;
 const LANG_CACHE = new Map<string, LangMap>();

@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import AdmZip from "adm-zip";
 import { fileURLToPath } from "node:url";
+import { LOCAL_DATA_DIR } from "../config";
 
 type CatalogRow = {
     id: string;
@@ -20,7 +21,7 @@ type CatalogRow = {
 };  
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const BUNDLED = path.resolve(__dirname, "..", "data", "advancements-vanilla.json");
+const BUNDLED = path.resolve(LOCAL_DATA_DIR, "advancements-vanilla.json");
 const SERVER_JAR = process.env.SERVER_JAR || "";
 
 let memo: CatalogRow[] | null = null;

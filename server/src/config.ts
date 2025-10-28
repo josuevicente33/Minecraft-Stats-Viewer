@@ -9,3 +9,4 @@ export const RCON_PASSWORD = process.env.RCON_PASSWORD ?? "";
 export const MOCK = process.env.MOCK === "1";
 export const CACHE_TTL_MS = 10_000;
 export const MINECRAFT_ROOT = process.env.MINECRAFT_ROOT ?? "/mcroot";
+export const LOCAL_DATA_DIR = process.env.LOCAL_DATA_DIR ?? path.join(DATA_DIR, "local");
