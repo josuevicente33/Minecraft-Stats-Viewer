@@ -20,10 +20,10 @@ services:
       - RCON_TIMEOUT_MS=${RCON_TIMEOUT_MS}
     networks:
       - default
-      - vanilla_defaults
+      - vanilla_default
   
   networks:
-    vanilla_defaults:
+    vanilla_default:
       external: true
       
     volumes:
