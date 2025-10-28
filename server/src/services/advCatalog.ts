@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import AdmZip from "adm-zip";
-import { fileURLToPath } from "node:url";
+import { LOCAL_DATA } from "../config.js";
 
 type CatalogRow = {
     id: string;
@@ -19,8 +19,7 @@ type CatalogRow = {
     hidden?: boolean;
 };  
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const BUNDLED = path.resolve(__dirname,"advancements-vanilla.json");
+const BUNDLED = path.join(LOCAL_DATA, "advancements_catalog.json");
 const SERVER_JAR = process.env.SERVER_JAR || "";
 
 let memo: CatalogRow[] | null = null;
