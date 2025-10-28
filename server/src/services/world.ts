@@ -38,6 +38,8 @@ export async function readPlayerStatsRaw(uuidNoDash: string) {
 
 export async function readAdvancements(uuidNoDash: string) {
     const p = path.join(ORIGIN_WORLD, "advancements", `${uuidNoDash}.json`);
+    console.log("Reading advancements from", p);
+    console.log("uUId no dash:", uuidNoDash);
     return readJSON<any>(p, null);
 }
 
