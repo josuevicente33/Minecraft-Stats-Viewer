@@ -14,7 +14,11 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <NavLink to="/" className="flex items-center gap-2">
           <img src={Logo} alt="Logo" className="h-6 w-6 rounded" />
-          <h1 className="text-lg font-semibold tracking-tight">Minecraft Stats Viewer</h1>
+          
+          {/* if small screen Call it MC Stats */}
+          <span className="hidden sm:inline-block text-lg font-semibold tracking-tight text-black dark:text-white">
+            Minecraft Stats Viewer
+          </span>
         </NavLink>
 
         <nav className="flex items-center gap-2">
@@ -33,16 +37,6 @@ export default function Header() {
           <NavLink to="/leaderboard" className={({ isActive }) => `${linkBase} ${isActive ? linkActive : linkIdle}`}>
             Leaderboard
           </NavLink>
-
-          {/* quick theme toggle for dev */}
-          <button
-            onClick={() => document.documentElement.classList.toggle("dark")}
-            className="ml-2 inline-flex items-center rounded-lg border px-2.5 py-1.5 text-sm font-medium hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-900"
-            aria-label="Toggle theme"
-            title="Toggle theme"
-          >
-            ☾
-          </button>
         </nav>
       </div>
     </header>
