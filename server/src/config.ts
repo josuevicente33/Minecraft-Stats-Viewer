@@ -8,3 +8,4 @@ export const RCON_PORT = Number(process.env.RCON_PORT ?? 25575);
 export const RCON_PASSWORD = process.env.RCON_PASSWORD ?? "";
 export const MOCK = process.env.MOCK === "1";
 export const CACHE_TTL_MS = 10_000;
+export const MINECRAFT_ROOT = process.env.MINECRAFT_ROOT ?? "/mcroot";

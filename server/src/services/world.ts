@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { DATA_DIR, WORLD_DIR } from "../config.js";
+import { DATA_DIR, WORLD_DIR, MINECRAFT_ROOT } from "../config.js";
 
 export async function worldHasStats(): Promise<boolean> {
     try {
@@ -17,7 +17,7 @@ export async function readJSON<T=any>(p: string, fallback: T): Promise<T> {
 
 export async function loadUserCache() {
     type Row = { name: string; uuid: string };
-    const rows = await readJSON<Row[]>(path.join(DATA_DIR, "usercache.json"), []);
+    const rows = await readJSON<Row[]>(path.join(MINECRAFT_ROOT, "usercache.json"), []);
     const byUUID = new Map(rows.map(x => [x.uuid?.replace(/-/g, ""), x.name]));
     const byName = new Map(rows.map(x => [x.name, (x.uuid ?? "").replace(/-/g, "")]));
     return { byUUID, byName };
