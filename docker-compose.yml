@@ -17,7 +17,7 @@ services:
       - ${HOST_BACKEND_DATA}:/data
       - ${MINECRAFT_WORLD_DIR}:/data/world:ro
       - ${MINECRAFT_ROOT}:/mcroot:ro
-      - ${LOCAL_DATA_DIR}:/data/local:ro
+      - ${LOCAL_DATA}:/data/local:ro
     ports:
       - "${PORT}:8080"
     healthcheck:
