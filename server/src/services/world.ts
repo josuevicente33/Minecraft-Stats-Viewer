@@ -43,7 +43,7 @@ export async function readAdvancements(uuidNoDash: string) {
 
 export async function loadUserCacheWithSeen() {
     type Row = { name: string; uuid: string; expiresOn?: string };
-    const rows = await readJSON<Row[]>(path.join(DATA_DIR,"usercache.json"), []);
+    const rows = await readJSON<Row[]>(path.join(MINECRAFT_ROOT,"usercache.json"), []);
     const byUUID = new Map(rows.map(x => [x.uuid?.replace(/-/g,""), x.name]));
     const byName = new Map(rows.map(x => [x.name, (x.uuid ?? "").replace(/-/g,"")]));
     const lastSeen = new Map(rows.map(x => [x.uuid?.replace(/-/g,""), x.expiresOn || null]));
