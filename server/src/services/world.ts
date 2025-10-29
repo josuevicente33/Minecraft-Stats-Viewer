@@ -81,7 +81,7 @@ export async function getWorldOverview(): Promise<WorldOverview> {
   const seed = seedP.status === "fulfilled" ? seedP.value : null;
   const wb   = wbP.status === "fulfilled" ? wbP.value   : null;
 
-  const data: WorldOverview = {
+  const overview: WorldOverview = {
     seed:           seed ?? l?.seed ?? null,
     day:            time?.day ?? Math.floor((l?.worldAgeTicks ?? 0) / 24000),
     timeOfDay:      ticksToClock(time?.daytime ?? l?.dayTimeTicks ?? 0),
@@ -98,7 +98,7 @@ export async function getWorldOverview(): Promise<WorldOverview> {
       entityCounts: undefined,
   };
 
-  return cset("world:overview", data, 3_000);
+  return cset("world:overview", overview, 3_000);
 }
 
 export async function getWorldProgression(): Promise<WorldProgression> {
