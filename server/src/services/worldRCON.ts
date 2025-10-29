@@ -1,10 +1,11 @@
-import { rconSend } from "./rcon.js";
+import { rconSend, rconSendQueued } from "./rcon.js";
+
 
 export async function rconGetTime() {
     const [dayOut, daytimeOut, gameOut] = await Promise.all([
-            rconSend("time query day"),
-            rconSend("time query daytime"),
-            rconSend("time query gametime"),
+            rconSendQueued("time query day"),
+            rconSendQueued("time query daytime"),
+            rconSendQueued("time query gametime"),
     ]);
     const day = parseInt(dayOut.match(/\d+/)?.[0] ?? "0", 10);
     const daytime = parseInt(daytimeOut.match(/\d+/)?.[0] ?? "0", 10);
@@ -13,7 +14,7 @@ export async function rconGetTime() {
 }
 
 export async function rconGetDifficulty(): Promise<"peaceful"|"easy"|"normal"|"hard"> {
-    const out = await rconSend("difficulty");
+    const out = await rconSendQueued("difficulty");
     const d = out.toLowerCase();
     if (d.includes("peaceful")) return "peaceful";
     if (d.includes("easy")) return "easy";
@@ -22,13 +23,13 @@ export async function rconGetDifficulty(): Promise<"peaceful"|"easy"|"normal"|"h
 }
 
 export async function rconGetSeed(): Promise<number | string | null> {
-    const out = await rconSend("seed");
+    const out = await rconSendQueued("seed");
     const m = out.match(/-?\d+/);
     return m ? Number(m[0]) : null;
 }
 
 export async function rconGetWorldBorder() {
-    const sizeOut = await rconSend("worldborder get");
+    const sizeOut = await rconSendQueued("worldborder get");
     const size = parseFloat(sizeOut.match(/-?\d+(\.\d+)?/g)?.[0] ?? "0");
     return { size };
 }

@@ -67,19 +67,19 @@ export async function getWorldOverview(): Promise<WorldOverview> {
   const cached = cget<WorldOverview>("world:overview");
   if (cached) return cached;
 
-  const [ldP, timeP, diffP, seedP, wbP] = await Promise.allSettled([
-    readLevelDat(ORIGIN_WORLD),
-    rconGetTime(),
-    rconGetDifficulty(),
-    rconGetSeed(),
-    rconGetWorldBorder(),
-  ]);
+  const ldPromise = readLevelDat(ORIGIN_WORLD);
 
-  const l    = ldP.status === "fulfilled" ? ldP.value : null;
-  const time = timeP.status === "fulfilled" ? timeP.value : null;
-  const diff = diffP.status === "fulfilled" ? diffP.value : null;
-  const seed = seedP.status === "fulfilled" ? seedP.value : null;
-  const wb   = wbP.status === "fulfilled" ? wbP.value   : null;
+  let time: null | { day: number; daytime: number; gametime: number } = null;
+  let diff: null | "peaceful"|"easy"|"normal"|"hard" = null;
+  let seed: null | number | string = null;
+  let wb:   null | { size: number } = null;
+
+  try { time = await rconGetTime(); }        catch (e) { console.warn("[rcon] time failed:", e); }
+  try { diff = await rconGetDifficulty(); }  catch (e) { console.warn("[rcon] diff failed:", e); }
+  try { seed = await rconGetSeed(); }        catch (e) { console.warn("[rcon] seed failed:", e); }
+  try { wb   = await rconGetWorldBorder(); } catch (e) { console.warn("[rcon] border failed:", e); }
+
+  const l = await ldPromise;
 
   const overview: WorldOverview = {
     seed:           seed ?? l?.seed ?? null,

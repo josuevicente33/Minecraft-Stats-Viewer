@@ -62,3 +62,16 @@ export async function rconSend(cmd: string): Promise<string> {
         try { client?.end(); } catch {}
     }
 }
+
+let chain: Promise<void> = Promise.resolve();
+export async function rconSendQueued(cmd: string): Promise<string> {
+    let result = ""; 
+
+    const task = async () => {
+        result = await withTimeout(rconSend(cmd));
+    };
+
+    chain = chain.then(task, task);
+    await chain;
+    return result;
+}
