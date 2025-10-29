@@ -58,6 +58,8 @@ services:
       - ${ORIGIN_WORLD}:/world:ro
       - ./overviewer/output:/output
       - ./overviewer/config:/config
+      - ${LOCAL_DATA}/client.jar:/textures/client.jar:ro
+
     restart: unless-stopped
     profiles: [prod]
 
