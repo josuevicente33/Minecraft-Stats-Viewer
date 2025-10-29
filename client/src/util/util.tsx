@@ -21,3 +21,6 @@ export const fmtRel = (iso?: string | null) => {
     return `${days}d ago`;
 };
 
+export function capitalize<T extends string>(s: T): T {
+    return (s.charAt(0).toUpperCase() + s.slice(1)) as T;
+}
