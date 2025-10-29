@@ -21,3 +21,16 @@ export function latestCriteriaTime(v: any): string | null {
     if (v?.done === true) return "true";
     return null;
 }
+
+export function ticksToClock(ticks: number) {
+    const t = (ticks + 6000) % 24000;
+    const hours = Math.floor(t / 1000);
+    const minutes = Math.floor(((t % 1000) / 1000) * 60);
+    return `${String(hours).padStart(2,"0")}:${String(minutes).padStart(2,"0")}`;
+}   
+export function mapDiff(n: number): "peaceful"|"easy"|"normal"|"hard" {
+    return (["peaceful","easy","normal","hard"][n] ?? "normal") as any;
+}
+export function mapGameType(n: number): "survival"|"creative"|"adventure"|"spectator" {
+    return (["survival","creative","adventure","spectator"][n] ?? "survival") as any;
+}
