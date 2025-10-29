@@ -19,4 +19,4 @@ export async function rconSend(cmd: string): Promise<string> {
     } finally {
         rcon.end();
     }
-    }
+}

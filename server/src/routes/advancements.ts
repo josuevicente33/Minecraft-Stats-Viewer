@@ -5,11 +5,10 @@ import { getAdvCatalog } from "../services/advCatalog.js";
 import { extractPlayerKey, latestCriteriaTime } from "../lib/util.js";
 import { loadLangFile, loadLangFromJar, enrichAdvCatalog } from "../services/langResolver.js";
 import { LOCAL_EN_US } from "../config.js";
-import path from "node:path";
 
 function parentGetter(catalog: { id: string; parent?: string | null }[]) {
-  const byId = new Map(catalog.map(x => [x.id, x.parent ?? null]));
-  return (id: string) => byId.get(id) ?? null;
+    const byId = new Map(catalog.map(x => [x.id, x.parent ?? null]));
+    return (id: string) => byId.get(id) ?? null;
 }
 
 type AdvState = "done" | "available" | "locked";

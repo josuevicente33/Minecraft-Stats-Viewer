@@ -14,23 +14,13 @@ export async function statusHandler(_req: http.IncomingMessage, res: http.Server
     let out: StatusOut;
 
     try {
-            // Primary: RCON `list`
-            const raw = await rconSend(process.env.USE_UUIDS ? "list uuids" : "list");
-            out = parseListOutput(raw);
-            // If parsing failed (rare), throw to trigger fallback
-            if (out.max === 0 && out.online === 0 && out.names.length === 0 && !/0\/\d+/.test(raw)) {
-                throw new Error("Unparsed RCON output");
+        const raw = await rconSend(process.env.USE_UUIDS ? "list uuids" : "list");
+        out = parseListOutput(raw);
+        if (out.max === 0 && out.online === 0 && out.names.length === 0 && !/0\/\d+/.test(raw)) {
+            throw new Error("Unparsed RCON output");
         }
     } catch (err) {
-        console.warn("RCON list failed, falling back to server ping");
-        try {
-            // Secondary: server list ping
-            out = { online: 0, max: 0, names: [], raw: "ping:fallback" };
-        } catch (e) {
-            // Final fallback: safe default
-            console.warn("Server ping failed, using default status");
-            out = { online: 0, max: 20, names: [], raw: "fallback" };
-        }
+        out = { online: 0, max: 0, names: [], raw: "error:rcon-failed:" + (err instanceof Error ? err.message : String(err)) };
     }
 
     cached = { data: out, at: Date.now() };
