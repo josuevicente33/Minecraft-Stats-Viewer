@@ -50,8 +50,8 @@ services:
     profiles: [prod]
 
   overviewer:
-    image: ghcr.io/overviewer/minecraft-overviewer:latest
-    command: ["/bin/sh", "-c", "set -e; while :; do echo \"[overviewer] render $(date -Is)\"; overviewer.py --config=/config/overviewer.cfg; echo \"[overviewer] done $(date -Is)\"; sleep ${RENDER_INTERVAL:-7200}; done"]
+    image: mide/minecraft-overviewer:latest
+    command: ["overviewer.py", "--config=/config/overviewer.cfg"]
     environment:
       - RENDER_INTERVAL=7200
     volumes:
