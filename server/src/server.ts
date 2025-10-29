@@ -15,6 +15,7 @@ import {
   worldPerformanceHandler,
   worldEventsHandler,
 } from "./routes/world.js";
+import { mapStaticHandler } from "./routes/staticMap.js";
 
 
 const router = new Router()
@@ -30,6 +31,9 @@ const router = new Router()
   .on("GET", /^\/world\/progression$/, worldProgressionHandler)
   .on("GET", /^\/world\/performance$/, worldPerformanceHandler)
   .on("GET", /^\/world\/events(?:\?.*)?$/, worldEventsHandler);
+
+  // --- STATIC MAP FILES ---
+router.on("GET", /^\/map\/?.*$/, mapStaticHandler);
 
 http.createServer((req, res) => {
   router.handle(req, res).catch(err => {

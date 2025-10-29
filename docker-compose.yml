@@ -14,10 +14,12 @@ services:
       - ORIGIN_WORLD=/world
       - LOCAL_DATA=/data
       - ASSETS_DIR=/assets
+      - MAP_DIR=/overviewer
       - RCON_HOST=mc
       - RCON_PORT=${RCON_PORT}
       - RCON_PASSWORD=${RCON_PASSWORD}
       - RCON_TIMEOUT_MS=${RCON_TIMEOUT_MS}
+
     networks:
       - default
       - vanilla_default
@@ -27,6 +29,7 @@ services:
       - ${ORIGIN_WORLD}:/world:ro
       - ${LOCAL_DATA}:/data:ro
       - ${ASSETS_DIR}:/assets:ro
+      - ${MAP_DIR}:/overviewer:ro
 
     ports:
       - "${PORT}:8080"
@@ -43,6 +46,18 @@ services:
     image: jvicente/mc-stats-client:latest
     ports:
       - "${CLIENT_PORT}:80"
+    restart: unless-stopped
+    profiles: [prod]
+
+  overviewer:
+    image: ghcr.io/overviewer/minecraft-overviewer:latest
+    command: ["/bin/sh", "-c", "set -e; while :; do echo \"[overviewer] render $(date -Is)\"; overviewer.py --config=/config/overviewer.cfg; echo \"[overviewer] done $(date -Is)\"; sleep ${RENDER_INTERVAL:-7200}; done"]
+    environment:
+      - RENDER_INTERVAL=7200
+    volumes:
+      - ${ORIGIN_WORLD}:/world:ro
+      - ./overviewer/output:/output
+      - ./overviewer/config:/config
     restart: unless-stopped
     profiles: [prod]
 

@@ -71,13 +71,13 @@ export default function World() {
                     </button>
                 </header>
                 {mapOpen && (
-                    <div className="px-4 pb-4">
-                        {/* Replace this with your Dynmap/Bluemap iframe or component */}
-                        <div className="h-[420px] w-full rounded-xl bg-linear-to-br from-gray-800 to-gray-900 grid place-items-center border border-gray-800">
-                            <p className="text-gray-400">
-                                Map placeholder — embed your viewer here (iframe or component)
-                            </p>
-                        </div>
+                    <div className="h-[520px] relative">
+                        <iframe
+                            src="/map/"
+                            title="World Map"
+                            className="absolute inset-0 w-full h-full"
+                            referrerPolicy="no-referrer"
+                        />
                     </div>
                     )}
             </section>

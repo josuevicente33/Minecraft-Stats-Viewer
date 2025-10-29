@@ -13,3 +13,4 @@ export const ORIGIN_WORLD = process.env.ORIGIN_WORLD ?? path.join(ORIGIN_DATA, "
 export const LOCAL_DATA = process.env.LOCAL_DATA ?? path.join(ORIGIN_DATA, "local");
 export const ASSETS_DIR = process.env.ASSETS_DIR ?? path.join(LOCAL_DATA, "assets");
 export const LOCAL_EN_US = path.join(ASSETS_DIR, "minecraft", "lang", "en_us.json");
+export const MAP_DIR = process.env.MAP_DIR ?? path.join(LOCAL_DATA, "overviewer", "output");
