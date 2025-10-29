@@ -9,6 +9,13 @@ import { playersHandler } from "./routes/players.js";
 import { playerHandler } from "./routes/player.js";
 import { leaderboardsHandler } from "./routes/leaderboards.js";
 import { playerAdvancementsHandler } from "./routes/advancements.js";
+import {
+  worldOverviewHandler,
+  worldProgressionHandler,
+  worldPerformanceHandler,
+  worldEventsHandler,
+} from "./routes/world.js";
+
 
 const router = new Router()
   .on("GET", /^\/health$/, (_req, res) => sendJSON(res, 200, { ok: true, dataDir: ORIGIN_DATA, worldDir: ORIGIN_WORLD, mock: MOCK }))
@@ -16,7 +23,13 @@ const router = new Router()
   .on("GET", /^\/players$/, playersHandler)
   .on("GET", /^\/player\/[^/]+$/, playerHandler)
   .on("GET", /^\/leaderboards(?:\?.*)?$/, leaderboardsHandler)
-  .on("GET", /^\/player\/[^/]+\/advancements$/, playerAdvancementsHandler);
+  .on("GET", /^\/player\/[^/]+\/advancements$/, playerAdvancementsHandler)
+  
+    // --- WORLD ENDPOINTS ---
+  .on("GET", /^\/world\/overview$/, worldOverviewHandler)
+  .on("GET", /^\/world\/progression$/, worldProgressionHandler)
+  .on("GET", /^\/world\/performance$/, worldPerformanceHandler)
+  .on("GET", /^\/world\/events(?:\?.*)?$/, worldEventsHandler);
 
 http.createServer((req, res) => {
   router.handle(req, res).catch(err => {
