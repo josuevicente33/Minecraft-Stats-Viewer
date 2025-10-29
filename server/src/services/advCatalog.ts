@@ -22,28 +22,38 @@ type CatalogRow = {
 const BUNDLED = path.join(LOCAL_DATA, "advancements-vanilla.json");
 const SERVER_JAR = process.env.SERVER_JAR || "";
 
-let memo: CatalogRow[] | null = null;
+let memoRows: CatalogRow[] | null = null;
+let memoIds: Set<string> | null = null;
+let memoTotal: number | null = null;
+const SKIP_PREFIX = "minecraft:recipes/";
 
 export async function getAdvCatalog(): Promise<CatalogRow[]> {
-    if (memo) return memo;
+    if (memoRows) return memoRows;
 
     if (SERVER_JAR) {
         try {
             const rows = await extractFromJar(SERVER_JAR);
-            if (rows.length) return (memo = rows);
+            if (rows.length) {
+                memoRows = rows;
+                memoIds = null;
+                memoTotal = null;
+                return memoRows;
+            }
         } catch (e: any) {
             console.warn("[advCatalog] JAR extraction failed, falling back:", e.message);
         }
     }
 
-
     try {
         const txt = await fs.readFile(BUNDLED, "utf8");
-        return (memo = JSON.parse(txt));
+        memoRows = JSON.parse(txt);
     } catch (e: any) {
         console.error("[advCatalog] bundled read failed:", e.message);
-        return (memo = []);
+        memoRows = [];
     }
+
+    memoIds = null; memoTotal = null;
+    return memoRows!;
 }
 
 async function extractFromJar(jarPath: string): Promise<CatalogRow[]> {
@@ -117,4 +127,24 @@ async function extractFromJar(jarPath: string): Promise<CatalogRow[]> {
 
     console.log(`[advCatalog] extracted ${out.length} visible advancements from ${path.basename(jarPath)}`);
     return out;
+}
+
+export async function getAdvCatalogIds(): Promise<Set<string>> {
+    if (memoIds) return memoIds;
+    const rows = await getAdvCatalog();
+    memoIds = new Set(
+        rows
+        .map(r => r.id)
+        .filter(Boolean)
+        .filter(id => !id.startsWith(SKIP_PREFIX) )
+    );
+    memoTotal = memoIds.size;
+    return memoIds;
+}
+
+export async function getAdvTotal(): Promise<number> {
+    if (memoTotal != null) return memoTotal;
+    const ids = await getAdvCatalogIds();
+    memoTotal = ids.size;
+    return memoTotal!;
 }
