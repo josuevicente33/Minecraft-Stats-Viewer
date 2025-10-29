@@ -6,7 +6,7 @@ import type { WorldOverview, WorldProgression, RecentEvent } from "../types/worl
 // UI
 import { EventsList } from "../components/ui/EventsList";
 import { Section } from "../components/ui/Section";
-import { OverviewGrid } from "../components/ui/OverViewGrid";
+import { OverviewGrid } from "../components/ui/OverviewGrid";
 import { EmptyNote } from "../components/ui/EmptyNote";
 import { ProgressionPanel } from "../components/ui/ProgressionPanel";
 
