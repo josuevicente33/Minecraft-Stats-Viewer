@@ -1,15 +1,11 @@
 import type http from "node:http";
 import { URL } from "node:url";
 import { sendJSON } from "../lib/response.js";
-
-import { getWorldOverviewMerged } from "../services/worldMerged.js";
-import { getRecentEvents } from "../services/world.js";
-import { getWorldPerformance } from "../services/world.js";
-import { getWorldProgression } from "../services/world.js";
+import { getWorldPerformance, getWorldProgression, getRecentEvents, getWorldOverview } from "../services/world.js";
 
 export async function worldOverviewHandler(_req: http.IncomingMessage, res: http.ServerResponse) {
     try {
-        const data = await getWorldOverviewMerged();
+        const data = await getWorldOverview();
         return sendJSON(res, 200, data);
     } catch (e: any) {
         return sendJSON(res, 500, { error: e?.message ?? "overview error" });
