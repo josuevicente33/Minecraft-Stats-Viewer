@@ -10,7 +10,7 @@ export default function Home() {
                 <br />
                 Features: Server status, online players, and leaderboards are updated in real-time.
                 <br />
-                Basic information on the tech stack: React, TypeScript, Tailwind CSS, and Vite on the frontend; Node.js, Express with no database. The website is being hosted on a personal docker server where the Minecraft server is also hosted.
+                Basic information on the tech stack: React, TypeScript, Tailwind CSS, and Vite on the frontend; Node.js. The website is being hosted on a personal docker server along with the Minecraft server.
             </p>
 
         </div>
