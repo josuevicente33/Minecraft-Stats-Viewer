@@ -29,7 +29,6 @@ services:
       - ${ORIGIN_WORLD}:/world:ro
       - ${LOCAL_DATA}:/data:ro
       - ${ASSETS_DIR}:/assets:ro
-      - ${MAP_DIR}:/overviewer:ro
 
     ports:
       - "${PORT}:8080"
