@@ -63,6 +63,19 @@ services:
     restart: unless-stopped
     profiles: [prod]
 
+  bluemap:
+    image: ghcr.io/bluemap-minecraft/bluemap:v3
+    restart: unless-stopped
+    command: -r -u -w
+    ports:
+      - "8100:8100"
+    volumes:
+      - ./bluemap/config:/app/config
+      - ./bluemap/web:/app/web
+      - ./bluemap/data:/app/data
+      - ${ORIGIN_WORLD}:/app/world:ro
+    profiles: [prod]
+
   cloudflared:
     image: cloudflare/cloudflared:2025.8.1
     environment:
