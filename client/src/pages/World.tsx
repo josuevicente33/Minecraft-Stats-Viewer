@@ -61,7 +61,7 @@ export default function World() {
                 <header className="flex items-center justify-between px-4 py-3">
                     <div className="flex items-center gap-2">
                         <span className="text-lg font-semibold">Map / Viewer</span>
-                        <span className="text-xs text-gray-400">(Dynmap / Bluemap / placeholder)</span>
+                        <span className="text-xs text-gray-400">(Bluemap)</span>
                     </div>
                     <button
                         onClick={() => setMapOpen(v => !v)}
