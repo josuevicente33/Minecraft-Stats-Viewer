@@ -47,28 +47,13 @@ services:
     ports:
       - "${CLIENT_PORT}:80"
     restart: unless-stopped
-    profiles: [prod]
-
-  overviewer:
-    image: mide/minecraft-overviewer:latest
-    command: ["overviewer.py", "--config=/config/overviewer.cfg"]
-    environment:
-      - RENDER_INTERVAL=7200
-    volumes:
-      - ${ORIGIN_WORLD}:/world:ro
-      - ./overviewer/output:/output
-      - ./overviewer/config:/config
-      - ${LOCAL_DATA}:/textures:ro
-
-    restart: unless-stopped
+    depends_on: [bluemap]
     profiles: [prod]
 
   bluemap:
     image: ghcr.io/bluemap-minecraft/bluemap:v3
     restart: unless-stopped
     command: -r -u -w
-    ports:
-      - "8100:8100"
     volumes:
       - ./bluemap/config:/app/config
       - ./bluemap/web:/app/web
