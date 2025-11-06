@@ -99,7 +99,7 @@ export default function Leaderboard() {
             {err && <p className="mb-3 text-sm text-red-600 dark:text-red-400">Error: {err}</p>}
 
             <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800 overflow-scroll">
                     <thead className="bg-gray-50 dark:bg-gray-900">
                         <tr className="text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                         <th className="px-4 py-2">#</th>
