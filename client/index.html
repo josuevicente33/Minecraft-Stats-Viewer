@@ -1,6 +1,25 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script id="theme-preload">
+      (() => {
+        try {
+          const LS_KEY = 'theme';
+          const stored = localStorage.getItem(LS_KEY);
+          const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+          const wantDark = stored
+            ? stored === 'dark'
+            : systemDark;
+
+          const root = document.documentElement;
+          root.classList.toggle('dark', wantDark);
+
+          document.documentElement.style.colorScheme = wantDark ? 'dark' : 'light';
+        } catch {}
+      })();
+    </script>
+
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/MCLogo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
