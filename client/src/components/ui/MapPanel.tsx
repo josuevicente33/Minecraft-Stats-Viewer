@@ -53,7 +53,7 @@ export function MapPanel() {
     if (status === 'checking') {
         return (
         <div className="h-[520px] p-6">
-            <div className="h-full animate-pulse rounded-xl bg-[--color-card] border border-[--color-border]" />
+            <div className="h-full animate-pulse rounded-xl bg-[--color-card]" />
         </div>
         );
     }
