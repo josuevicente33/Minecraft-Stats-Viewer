@@ -54,6 +54,9 @@ export function MapPanel() {
         return (
         <div className="h-[520px] p-6">
             <div className="h-full animate-pulse rounded-xl bg-[--color-card]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <span className="text-sm text-muted">Checking map availability...</span>
+            </div>
         </div>
         );
     }
