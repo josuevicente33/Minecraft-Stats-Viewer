@@ -2,52 +2,44 @@ import * as React from 'react';
 
 type Status = 'checking' | 'available' | 'missing';
 
-function useBlueMapAvailability(base: string) {
+function useBlueMapAvailability(base: string, file = 'favicon.png', timeoutMs = 6000) {
     const [status, setStatus] = React.useState<Status>('checking');
     const [rev, setRev] = React.useState(0);
 
+    const retry = React.useCallback(() => {
+        setStatus('checking');
+        setRev(v => v + 1);
+    }, []);
+
     React.useEffect(() => {
-        let alive = true;
-        async function check() {
-            const ctrl = new AbortController();
-            const t = setTimeout(() => ctrl.abort(), 8000); // 8s
+        let done = false;
+        const img = new Image();
 
-            try {
-                const url = new URL('maps.json', base).toString();
-
-                // BlueMap returns an array of maps (or { maps: [...] } in some versions)
-                const res = await fetch(url, { cache: 'no-store', signal: ctrl.signal });
-                if (!alive) return;
-
-                if (!res.ok) {
-                setStatus('missing');
-                return;
-                }
-
-                const data = await res.json().catch(() => null);
-                const looksBlueMap =
-                Array.isArray(data) ||
-                (data && typeof data === 'object' && Array.isArray((data as any).maps));
-
-                setStatus(looksBlueMap ? 'available' : 'missing');
-            } catch (_e) {
-                if (!alive) return;
-                setStatus('missing');
-            } finally {
-                clearTimeout(t);
+        const finish = (s: Status) => {
+            if (!done) {
+                done = true;
+                setStatus(s);
             }
-        }
-
-        check();
-        return () => {
-            alive = false;
         };
-    }, [base, rev]);
 
-    const retry = () => setRev(n => n + 1);
+        const url = `${base.replace(/\/$/, '')}/${file}?cb=${Date.now()}`;
+
+        const t = window.setTimeout(() => finish('missing'), timeoutMs);
+
+        img.onload = () => { window.clearTimeout(t); finish('available'); };
+        img.onerror = () => { window.clearTimeout(t); finish('missing'); };
+
+        img.referrerPolicy = 'no-referrer';
+        img.src = url;
+
+        return () => {
+            done = true;
+            window.clearTimeout(t);
+        };
+    }, [base, rev, file, timeoutMs]);
+
     return { status, retry, rev };
 }
-
 
 export function MapPanel() {
     const { status, retry, rev } = useBlueMapAvailability('/map/');
@@ -70,12 +62,11 @@ export function MapPanel() {
                 <h3 className="text-fg font-semibold">Map not available</h3>
                 <p className="text-sm text-muted mt-1">
                     We couldn’t detect BlueMap at <code className="px-1 rounded bg-[--color-card] border border-[--color-border]">/map/</code>.
-                    Start the service or check the proxy path.
                 </p>
 
                 <div className="mt-4 flex items-center justify-center gap-2">
-                    <button
-                        onClick={retry}
+                    <button 
+                        onClick={retry} 
                         className="rounded-lg px-3 py-1.5 text-sm border border-border hover:bg-background dark:hover:bg-gray-800"
                     >
                         Retry
@@ -97,4 +88,3 @@ export function MapPanel() {
         </div>
     );
 }
-
