@@ -7,6 +7,7 @@
   /* surfaces */
   --color-card: var(--color-white);
   --color-border: var(--color-gray-200);
+  --color-section: var(--color-white);
 
   /* text */
   --color-fg: var(--color-gray-950);
@@ -18,6 +19,8 @@
 .dark {
   --color-card:  var(--color-gray-950);
   --color-border: var(--color-gray-800);
+  --color-section: var(--color-gray-900);
+
   --color-fg: var(--color-gray-200);
   --color-muted: var(--color-gray-400);
   --color-background: var(--color-gray-950);

@@ -58,7 +58,7 @@ export default function World() {
             </div>
 
             {/* Collapsible Map / Viewer */}
-            <section className="rounded-2xl bg-card border border-border shadow-sm">
+            <section className="rounded-2xl bg-section/60 border border-border shadow-sm">
                 <header className="flex items-center justify-between px-4 py-3">
                     <div className="flex items-center gap-2">
                         <span className="text-lg font-semibold">Map / Viewer</span>
@@ -66,7 +66,7 @@ export default function World() {
                     </div>
                     <button
                         onClick={() => setMapOpen(v => !v)}
-                        className="rounded-xl border border-gray-700 px-3 py-1.5 text-sm hover:bg-gray-500"
+                        className="rounded-xl border border-gray-700 px-3 py-1.5 text-sm hover:bg-gray-300 dark:hover:bg-gray-800"
                     >
                         {mapOpen ? "Collapse" : "Expand"}
                     </button>

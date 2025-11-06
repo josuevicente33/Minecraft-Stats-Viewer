@@ -26,7 +26,7 @@ export function ProgressionPanel({ data }: { data: WorldProgression }) {
                     <h3 className="font-semibold">Advancements</h3>
                     <span className="text-sm text-muted">{data.advancements.completed}/{data.advancements.total} ({pct}%)</span>
                 </div>
-                <div className="h-3 w-full rounded-full bg-gray-800">
+                <div className="h-3 w-full rounded-full bg-gray-800/30 dark:bg-gray-800">
                     <div className="h-3 rounded-full bg-gray-600" style={{ width: `${pct}%` }} />
                 </div>
             </div>

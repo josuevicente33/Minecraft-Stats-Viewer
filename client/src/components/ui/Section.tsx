@@ -4,7 +4,7 @@ export function Section({
     children,
 }: { title: string; loading?: boolean; children: React.ReactNode }) {
     return (
-        <section className="rounded-2xl bg-card border border-border shadow-sm">
+        <section className="rounded-2xl bg-section/60 border border-border shadow-sm">
             <header className="px-4 py-3 border-b border-border">
                 <h2 className="text-lg font-semibold">{title}</h2>
             </header>

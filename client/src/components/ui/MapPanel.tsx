@@ -59,7 +59,7 @@ export function MapPanel() {
 
     if (status === 'missing') {
         return (
-            <div className="p-8 text-center">
+            <div className="p-8 text-center bg-card">
                 <div className="mx-auto mb-3 h-10 w-10 rounded-full border border-[--color-border] grid place-items-center">
                     <span className="text-sm">🗺️</span>
                 </div>
@@ -73,7 +73,7 @@ export function MapPanel() {
                 <div className="mt-4 flex items-center justify-center gap-2">
                     <button
                         onClick={retry}
-                        className="rounded-lg px-3 py-1.5 text-sm border border-border hover:bg-background"
+                        className="rounded-lg px-3 py-1.5 text-sm border border-border hover:bg-background dark:hover:bg-gray-800"
                     >
                         Retry
                     </button>
