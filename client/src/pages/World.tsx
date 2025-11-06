@@ -9,6 +9,7 @@ import { Section } from "../components/ui/Section";
 import { OverviewGrid } from "../components/ui/OverviewGrid";
 import { EmptyNote } from "../components/ui/EmptyNote";
 import { ProgressionPanel } from "../components/ui/ProgressionPanel";
+import { MapPanel } from "../components/ui/MapPanel";
 
 export default function World() {
     const [mapOpen, setMapOpen] = useState(true);
@@ -65,21 +66,12 @@ export default function World() {
                     </div>
                     <button
                         onClick={() => setMapOpen(v => !v)}
-                        className="rounded-xl border border-gray-700 px-3 py-1.5 text-sm hover:bg-gray-800"
+                        className="rounded-xl border border-gray-700 px-3 py-1.5 text-sm hover:bg-gray-500"
                     >
                         {mapOpen ? "Collapse" : "Expand"}
                     </button>
                 </header>
-                {mapOpen && (
-                    <div className="h-[520px] relative">
-                        <iframe
-                            src="/map/"
-                            title="World Map"
-                            className="absolute inset-0 w-full h-full"
-                            referrerPolicy="no-referrer"
-                        />
-                    </div>
-                    )}
+                {mapOpen && <MapPanel />}
             </section>
 
             {/* Overview */}
