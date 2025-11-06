@@ -2,41 +2,47 @@ import * as React from 'react';
 
 type Status = 'checking' | 'available' | 'missing';
 
-function useBlueMapAvailability(base: string, file = 'favicon.png', timeoutMs = 6000) {
+function useBlueMapAvailability(base: string, timeoutMs = 6000) {
     const [status, setStatus] = React.useState<Status>('checking');
     const [rev, setRev] = React.useState(0);
-
     const retry = React.useCallback(() => {
         setStatus('checking');
         setRev(v => v + 1);
     }, []);
 
     React.useEffect(() => {
-        let done = false;
-        const img = new Image();
+        let alive = true;
 
-        const finish = (s: Status) => {
-            if (!done) {
-                done = true;
-                setStatus(s);
-            }
-        };
+        const mark = (s: Status) => { if (alive) setStatus(s); };
 
-        const url = `${base.replace(/\/$/, '')}/${file}?cb=${Date.now()}`;
+        (async () => {
+        try {
+            const ctrl = new AbortController();
+            const t = setTimeout(() => ctrl.abort(), timeoutMs);
 
-        const t = window.setTimeout(() => finish('missing'), timeoutMs);
+            // Cache-bust to avoid stale HTML
+            const resp = await fetch(
+            `${base.replace(/\/$/, '')}/?probe=${Date.now()}`,
+            { method: 'GET', cache: 'no-store', signal: ctrl.signal }
+            );
+            clearTimeout(t);
 
-        img.onload = () => { window.clearTimeout(t); finish('available'); };
-        img.onerror = () => { window.clearTimeout(t); finish('missing'); };
+            if (!resp.ok) return mark('missing');
 
-        img.referrerPolicy = 'no-referrer';
-        img.src = url;
+            const html = await resp.text();
 
-        return () => {
-            done = true;
-            window.clearTimeout(t);
-        };
-    }, [base, rev, file, timeoutMs]);
+            const looksLikeStatsApp = html.includes('name="x-stats-ui"');
+            const looksLikeBlueMap  = /BlueMap/i.test(html) || /id=["']bluemap["']/.test(html);
+
+            if (!looksLikeStatsApp && looksLikeBlueMap) mark('available');
+            else mark('missing');
+        } catch {
+            mark('missing');
+        }
+        })();
+
+        return () => { alive = false; };
+    }, [base, rev, timeoutMs]);
 
     return { status, retry, rev };
 }
