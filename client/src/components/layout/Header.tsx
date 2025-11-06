@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
 import Logo from "../../assets/MCLogo.png";
 
+import { ThemeToggle } from "../ui/ThemeToggle";
+
 const linkBase =
   "inline-flex items-center rounded-lg border border-transparent px-3 py-1.5 text-sm font-medium transition-colors";
 const linkIdle =
@@ -10,7 +12,7 @@ const linkActive =
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-20 border-b bg-white/90 backdrop-blur supports-backdrop-filter:bg-white/60 dark:border-gray-800 dark:bg-gray-950/80">
+    <header className="sticky top-0 z-20 border-gray-500 bg-white/90 backdrop-blur supports-backdrop-filter:bg-white/60 dark:border-gray-800 dark:bg-gray-950/80">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <NavLink to="/" className="flex items-center gap-2">
           <img src={Logo} alt="Logo" className="h-6 w-6 rounded" />
@@ -37,6 +39,8 @@ export default function Header() {
           <NavLink to="/leaderboard" className={({ isActive }) => `${linkBase} ${isActive ? linkActive : linkIdle}`}>
             Leaderboard
           </NavLink>
+          
+          <ThemeToggle />
         </nav>
       </div>
     </header>

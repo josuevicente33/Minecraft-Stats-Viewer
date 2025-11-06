@@ -21,17 +21,17 @@ export function ProgressionPanel({ data }: { data: WorldProgression }) {
                 <StatCard label="Warden Encounters" value={`${data.bosses.wardenSpawns}`} />
             </div>
 
-            <div className="rounded-xl border border-gray-800 p-4">
+            <div className="rounded-xl border border-border p-4">
                 <div className="flex items-center justify-between mb-2">
                     <h3 className="font-semibold">Advancements</h3>
-                    <span className="text-sm text-gray-400">{data.advancements.completed}/{data.advancements.total} ({pct}%)</span>
+                    <span className="text-sm text-muted">{data.advancements.completed}/{data.advancements.total} ({pct}%)</span>
                 </div>
                 <div className="h-3 w-full rounded-full bg-gray-800">
                     <div className="h-3 rounded-full bg-gray-600" style={{ width: `${pct}%` }} />
                 </div>
             </div>
 
-            <div className="rounded-xl border border-gray-800 p-4">
+            <div className="rounded-xl border border-border p-4">
                 <h3 className="font-semibold mb-2">Dimensions</h3>
                 <div className="flex gap-2 text-sm">
                     <Tag label="Overworld" on={data.dimensions.overworld} />
@@ -40,12 +40,12 @@ export function ProgressionPanel({ data }: { data: WorldProgression }) {
                 </div>
             </div>
 
-            <div className="rounded-xl border border-gray-800 p-4">
+            <div className="rounded-xl border border-border p-4">
                 <h3 className="font-semibold mb-2">Structures discovered</h3>
                     {data.structures.length ? (
                         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-sm">
                             {data.structures.map(s => (
-                            <li key={s.id} className="rounded-lg border border-gray-800 px-3 py-2">
+                            <li key={s.id} className="rounded-lg border border-border px-3 py-2">
                                 <div className="font-medium">{s.name}</div>
                                 {s.discoveredBy?.length ? (
                                 <div className="text-gray-400 text-xs">by {s.discoveredBy.join(", ")}</div>
