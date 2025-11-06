@@ -2,44 +2,47 @@ import * as React from 'react';
 
 type Status = 'checking' | 'available' | 'missing';
 
-function useEndpointAvailability(urlBase: string) {
+function useBlueMapAvailability(base: string) {
     const [status, setStatus] = React.useState<Status>('checking');
     const [rev, setRev] = React.useState(0);
 
     React.useEffect(() => {
         let alive = true;
-
         async function check() {
+            const ctrl = new AbortController();
+            const t = setTimeout(() => ctrl.abort(), 8000); // 8s
+
             try {
-                const assetUrl = new URL('assets/bluemap.css', urlBase).toString();
-                let asset = await fetch(assetUrl, { cache: 'no-store' });
+                const url = new URL('maps.json', base).toString();
 
-                if (!asset.ok) {
-                const indexUrl = new URL('index.html', urlBase).toString();
-                const htmlRes = await fetch(indexUrl, { cache: 'no-store' });
-                if (!htmlRes.ok) throw new Error('index.html missing');
-                const text = await htmlRes.text();
-
-                const looksLikeBlueMap =
-                    /BlueMap/i.test(text) ||
-                    /bluemap\.css/i.test(text) ||
-                    /<div[^>]+id="bluemap-root"/i.test(text);
-
+                // BlueMap returns an array of maps (or { maps: [...] } in some versions)
+                const res = await fetch(url, { cache: 'no-store', signal: ctrl.signal });
                 if (!alive) return;
-                setStatus(looksLikeBlueMap ? 'available' : 'missing');
+
+                if (!res.ok) {
+                setStatus('missing');
                 return;
                 }
 
-                if (!alive) return;
-                setStatus('available');
-            } catch {
+                const data = await res.json().catch(() => null);
+                const looksBlueMap =
+                Array.isArray(data) ||
+                (data && typeof data === 'object' && Array.isArray((data as any).maps));
+
+                setStatus(looksBlueMap ? 'available' : 'missing');
+            } catch (_e) {
                 if (!alive) return;
                 setStatus('missing');
+            } finally {
+                clearTimeout(t);
             }
         }
+
         check();
-        return () => { alive = false; };
-    }, [urlBase, rev]);
+        return () => {
+            alive = false;
+        };
+    }, [base, rev]);
 
     const retry = () => setRev(n => n + 1);
     return { status, retry, rev };
@@ -47,7 +50,7 @@ function useEndpointAvailability(urlBase: string) {
 
 
 export function MapPanel() {
-    const { status, retry, rev } = useEndpointAvailability('/map/');
+    const { status, retry, rev } = useBlueMapAvailability('/map/');
 
     if (status === 'checking') {
         return (
